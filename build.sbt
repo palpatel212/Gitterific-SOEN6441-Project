@@ -15,3 +15,5 @@ EclipseKeys.preTasks := Seq(compile in Compile, compile in Test)
 
 
 PlayKeys.fileWatchService := play.dev.filewatch.FileWatchService.jdk7(play.sbt.run.toLoggerProxy(sLog.value))
+libraryDependencies += "org.apache.httpcomponents" % "httpclient" % "4.5.2"
+libraryDependencies += "org.json" % "json" % "20210307"
