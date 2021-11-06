@@ -19,7 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Search {
-	
+
 public static JSONObject searchRepos(ArrayList<String> terms) {
 		
 		JSONObject jsonObject = null;
