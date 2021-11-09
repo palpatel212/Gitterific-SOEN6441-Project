@@ -1,5 +1,14 @@
-@()
+@(repos : List[Repository])
 
 @main("Welcome to Gitterific") {
   <h1>Welcome to Gitterific</h1>
+  @for(r<-repos){
+  <p>@r.authorProfile</p>
+  <p>@r.repourl</p>
+  <p>@r.createdAt</p>
+  <p>@r.updatedAt</p>
+  <p>@r.gitCommitsurl</p>
+  <p>@r.commitsUrl</p>
+  <p>@r.issuesUrl</p>
+  }
 }
