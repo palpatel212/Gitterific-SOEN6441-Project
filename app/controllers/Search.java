@@ -10,6 +10,10 @@ import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -18,8 +22,12 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import models.Repository;
+import scala.util.parsing.json.JSONArray;
+
 public class Search {
 
+	static public List<Repository> repos = new ArrayList<Repository>();
 public static JSONObject searchRepos(ArrayList<String> terms) {
 		
 		JSONObject jsonObject = null;
@@ -57,13 +65,39 @@ public static JSONObject searchRepos(ArrayList<String> terms) {
 	}
 
 	
-	public static void main(String[] args) {
+	public static List<Repository> findrepo() {
 		ArrayList<String> terms = new ArrayList<>();
-		terms.add("Apache");
-		terms.add("kafka");
+		terms.add("pytorch");
+		//terms.add("");
 		
+		System.out.println("Searching repo");
 		JSONObject json = searchRepos(terms);
 		System.out.println(json.toString(4));
+		
+		org.json.JSONArray array = json.getJSONArray("items");
+		for(int i=0; i<array.length();i++) {
+			Repository obj = new Repository();
+			JSONObject owner = (JSONObject)array.getJSONObject(i).get("owner");
+			String authorProfile= (String)owner.getString("url");
+			obj.setAuthorProfile(authorProfile); 
+			String repourl= (String)owner.getString("html_url");
+			obj.setRepourl(repourl); 
+			String createdAt= array.getJSONObject(i).getString("created_at");
+			obj.setCreatedAt(createdAt);
+			String updatedAt= array.getJSONObject(i).getString("updated_at");
+			obj.setUpdatedAt(updatedAt);
+			String gitCommitsurl= array.getJSONObject(i).getString("git_commits_url");
+			obj.setGitCommitsurl(gitCommitsurl);
+			String Commitsurl= array.getJSONObject(i).getString("commits_url");
+			obj.setCommitsUrl(Commitsurl);
+			String issuesUrl= array.getJSONObject(i).getString("issues_url");
+			obj.setIssuesUrl(issuesUrl);		
+			repos.add(obj);
+		}
+		
+
+		
+		return repos;
 	}
 
 }
