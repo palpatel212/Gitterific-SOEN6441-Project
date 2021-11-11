@@ -52,24 +52,13 @@ public class HomeController extends Controller {
     	return ok(views.html.create.render(repoForm,request,messagesApi.preferred(request)));
     }
     
-    
     public Result save(Http.Request request) {
-    	System.out.println("ENtered...");
     	Form<RepoData> repoForm = formFactory.form(RepoData.class);
-    	repos = repoForm.bindFromRequest(request).get();
-    	System.out.println("In save");
- 
-		return displayRepo();
-    }
-    
-    
-    
-    public Result displayRepo() {
-    	String keyword= repos.getKeyword();	
+    	repos = repoForm.bindFromRequest(request).get();  	
+    	String keyword= repos.getKeyword();
     	String[] words = keyword.split(" ");
     	keywords = Arrays.asList(words);
     	System.out.println(keywords);
-    	System.out.println("Entered display Repo");
     	List<Repository> repo = Search.findrepo(keywords);
     	return ok(views.html.index.render(repo));
     }

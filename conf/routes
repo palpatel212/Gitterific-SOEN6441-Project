@@ -8,7 +8,6 @@ GET     /                           controllers.HomeController.index()
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
 
-GET		/repo						controllers.HomeController.displayRepo()
 GET 	/create  			        controllers.HomeController.create(request : Request)
 POST 	/create						controllers.HomeController.save(request : Request)
 GET    /user/:id                        controllers.HomeController.collaborators(id : Long)
