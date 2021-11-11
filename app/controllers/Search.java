@@ -34,6 +34,7 @@ public class Search extends Controller{
 	@Inject
 	FormFactory formFactory;
 	static public List<Repository> repos = new ArrayList<Repository>();
+	static public List<Repository> repoDetail = new ArrayList<Repository>();
 	
 	
 	public static JSONObject searchRepos(ArrayList<String> terms) {
@@ -92,10 +93,15 @@ public class Search extends Controller{
 			JSONObject owner = (JSONObject)array.getJSONObject(i).get("owner");
 			String authorProfile= (String)owner.getString("url");
 			obj.setAuthorProfile(authorProfile); 
-			String repourl= (String)owner.getString("html_url");
+			String login= (String)owner.getString("login");
+			obj.setLogin(login); 
+			String repourl= (String)owner.getString("repos_url");
 			obj.setRepourl(repourl); 
 			String createdAt= array.getJSONObject(i).getString("created_at");
 			obj.setCreatedAt(createdAt);
+			String repoName= array.getJSONObject(i).getString("name");
+			obj.setRepoName(repoName);
+			
 			String updatedAt= array.getJSONObject(i).getString("updated_at");
 			obj.setUpdatedAt(updatedAt);
 			String gitCommitsurl= array.getJSONObject(i).getString("git_commits_url");
@@ -111,4 +117,6 @@ public class Search extends Controller{
 		return repos;
 	}
 
+	
+	
 }
