@@ -1,0 +1,15 @@
+@(repoForm : Form[RepoData])(implicit request: Http.Request, messages: play.i18n.Messages)
+@import helper._
+
+<html>
+	<head>
+		<title>Repos</title>
+	</head>
+	<body>
+		@helper.form(action= helper.CSRF(routes.HomeController.save())){
+			@helper.inputText(repoForm("keyword"))
+			<input type="submit" value="Go">
+		}
+		
+	</body>
+</html>
