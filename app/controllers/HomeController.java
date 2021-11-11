@@ -74,29 +74,29 @@ public class HomeController extends Controller {
     	return ok(views.html.index.render(repo));
     }
     
-    public Result collaborators(long id) {
+    public Result collaborators(String id) {
     	
     	for(Repository rd : Search.repos) {
-    		if(id == rd.id)
+    		if(id.equals(rd.id))
 			r= rd;
     	}
     	return ok(views.html.user.render(r));
     	
     }
     
-    public Result issues(long id) {
+    public Result issues(String id) {
     	
     	for(Repository rd : Search.repos) {
-    		if(id == rd.id)
+    		if(id.equals(rd.id))
 			r= rd;
     	}
     	return ok(views.html.issues.render(r));
     	
     	
     }
-    public Result commits(long id) {
+    public Result commits(String id) {
     	for(Repository rd : Search.repos) {
-    		if(id == rd.id)
+    		if(id.equals(rd.id))
 			r= rd;
     	}
     	return ok(views.html.commits.render(r));
@@ -104,11 +104,11 @@ public class HomeController extends Controller {
     	
     }
     
-    public Result repo(long id)
+    public Result repo(String id)
 
     {
     	for(Repository rd : Search.repos) {
-    		if(id == rd.id)
+    		if(id.equals(rd.id))
 			r= rd;
     	}
 
