@@ -29,6 +29,7 @@ public class HomeController extends Controller {
      * <code>GET</code> request with a path of <code>/</code>.
      */
 	static RepoData repos;
+	Repository r= new Repository();
 	FormFactory formFactory;
 	MessagesApi messagesApi;
 	Form<RepoData> repoForm;
@@ -72,6 +73,51 @@ public class HomeController extends Controller {
     	List<Repository> repo = Search.findrepo(keywords);
     	return ok(views.html.index.render(repo));
     }
+    
+    public Result collaborators(long id) {
+    	
+    	for(Repository rd : Search.repos) {
+    		if(id == rd.id)
+			r= rd;
+    	}
+    	return ok(views.html.user.render(r));
+    	
+    }
+    
+    public Result issues(long id) {
+    	
+    	for(Repository rd : Search.repos) {
+    		if(id == rd.id)
+			r= rd;
+    	}
+    	return ok(views.html.issues.render(r));
+    	
+    	
+    }
+    public Result commits(long id) {
+    	for(Repository rd : Search.repos) {
+    		if(id == rd.id)
+			r= rd;
+    	}
+    	return ok(views.html.commits.render(r));
+    	
+    	
+    }
+    
+    public Result repo(long id)
+
+    {
+    	for(Repository rd : Search.repos) {
+    		if(id == rd.id)
+			r= rd;
+    	}
+
+    	System.out.println("Repos ID"+id);
+    	return ok(views.html.RepoView.render(r));
+    	
+    }
+    
+    
  
     
 
