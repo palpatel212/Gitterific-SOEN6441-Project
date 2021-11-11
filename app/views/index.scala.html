@@ -4,8 +4,10 @@
   <h1>Welcome to Gitterific</h1>
   @for(r<-repos){
   
-  <a href="@routes.HomeController.repo(r.id)">@r.repoName</a>&nbsp;|&nbsp;
   <a href="@routes.HomeController.collaborators(r.id)">@r.login</a>
+  &nbsp;|&nbsp;
+  <a href="@routes.HomeController.repo(r.id)">@r.repoName</a>
+  
   </br>
   
   }
