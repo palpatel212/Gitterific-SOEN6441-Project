@@ -3,12 +3,10 @@
 @main("Welcome to Gitterific") {
   <h1>Welcome to Gitterific</h1>
   @for(r<-repos){
-  <p>@r.authorProfile</p>
-  <p>@r.repourl</p>
-  <p>@r.createdAt</p>
-  <p>@r.updatedAt</p>
-  <p>@r.gitCommitsurl</p>
-  <p>@r.commitsUrl</p>
-  <p>@r.issuesUrl</p>
+  
+  <a href="@routes.HomeController.repo(r.id)">@r.repoName</a>&nbsp;|&nbsp;
+  <a href="@routes.HomeController.collaborators(r.id)">@r.login</a>
+  </br>
+  
   }
 }
