@@ -7,7 +7,7 @@ import java.util.Set;
 public class Repository {
 
 	public String authorProfile;
-	public long id;
+	public String id;
 	public String repourl;
 	public String createdAt;
 	public String updatedAt;
@@ -19,10 +19,10 @@ public class Repository {
 	
 	
 	
-	public long getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	

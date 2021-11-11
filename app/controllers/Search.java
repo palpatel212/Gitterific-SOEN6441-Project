@@ -101,7 +101,10 @@ public class Search extends Controller{
 			obj.setCreatedAt(createdAt);
 			String repoName= array.getJSONObject(i).getString("name");
 			obj.setRepoName(repoName);
-			
+			Number id= array.getJSONObject(i).getNumber("id");
+			String idtemp=id.toString();
+			System.out.println("ID String"+idtemp);
+			obj.setId(idtemp);
 			String updatedAt= array.getJSONObject(i).getString("updated_at");
 			obj.setUpdatedAt(updatedAt);
 			String gitCommitsurl= array.getJSONObject(i).getString("git_commits_url");
