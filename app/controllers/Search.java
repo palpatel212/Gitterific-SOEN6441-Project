@@ -14,6 +14,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -23,12 +25,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import models.Repository;
+import play.data.FormFactory;
+import play.mvc.Controller;
 import scala.util.parsing.json.JSONArray;
 
-public class Search {
+public class Search extends Controller{
 
+	@Inject
+	FormFactory formFactory;
 	static public List<Repository> repos = new ArrayList<Repository>();
-public static JSONObject searchRepos(ArrayList<String> terms) {
+	
+	
+	public static JSONObject searchRepos(ArrayList<String> terms) {
 		
 		JSONObject jsonObject = null;
 		try {
@@ -63,12 +71,16 @@ public static JSONObject searchRepos(ArrayList<String> terms) {
 		}
 		return jsonObject;
 	}
+	
+	
 
 	
-	public static List<Repository> findrepo() {
+	public static List<Repository> findrepo(List<String> keywords) {
+		
 		ArrayList<String> terms = new ArrayList<>();
-		terms.add("pytorch");
-		//terms.add("");
+		for(String k: keywords) {
+			terms.add(k);
+		}
 		
 		System.out.println("Searching repo");
 		JSONObject json = searchRepos(terms);
@@ -96,7 +108,6 @@ public static JSONObject searchRepos(ArrayList<String> terms) {
 		}
 		
 
-		
 		return repos;
 	}
 
