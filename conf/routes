@@ -1,6 +1,6 @@
 # Routes
 # This file defines all application routes (Higher priority routes first)
-# ~~~~
+# ~~
 
 # An example controller showing a sample home page
 GET     /                           controllers.HomeController.index()
@@ -11,3 +11,7 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 GET		/repo						controllers.HomeController.displayRepo()
 GET 	/create  			        controllers.HomeController.create(request : Request)
 POST 	/create						controllers.HomeController.save(request : Request)
+GET    /user/:id                        controllers.HomeController.collaborators(id : Long)
+GET    /issues/:id                        controllers.HomeController.issues(id : Long)
+GET    /commits/:id                        controllers.HomeController.commits(id : Long)
+GET    /check/:id                       controllers.HomeController.repo(id : Long)
