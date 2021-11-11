@@ -9,3 +9,5 @@ GET     /                           controllers.HomeController.index()
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
 
 GET		/repo						controllers.HomeController.displayRepo()
+GET 	/create  			        controllers.HomeController.create(request : Request)
+POST 	/create						controllers.HomeController.save(request : Request)
