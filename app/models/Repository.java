@@ -7,15 +7,37 @@ import java.util.Set;
 public class Repository {
 
 	public String authorProfile;
+	public long id;
 	public String repourl;
 	public String createdAt;
 	public String updatedAt;
 	public String gitCommitsurl;
 	public String commitsUrl;
 	public String issuesUrl;
+	public String repoName;
+	public String login;
 	
 	
 	
+	public long getId() {
+		return id;
+	}
+	public void setId(long id) {
+		this.id = id;
+	}
+	
+	public String getLogin() {
+		return login;
+	}
+	public void setLogin(String login) {
+		this.login = login;
+	}
+	public String getRepoName() {
+		return repoName;
+	}
+	public void setRepoName(String repoName) {
+		this.repoName = repoName;
+	}
 	public String getAuthorProfile() {
 		return authorProfile;
 	}
