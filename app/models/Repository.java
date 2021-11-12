@@ -1,21 +1,24 @@
 package models;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 
 
 public class Repository {
 
-	public String authorProfile;
+//	public String authorProfile;
 	public String id;
 	public String repourl;
-	public String createdAt;
-	public String updatedAt;
+//	public String createdAt;
+//	public String updatedAt;
 	public String gitCommitsurl;
 	public String commitsUrl;
 	public String issuesUrl;
 	public String repoName;
 	public String login;
+	public ArrayList<String> topics;
+	
 	
 	
 	
@@ -38,31 +41,31 @@ public class Repository {
 	public void setRepoName(String repoName) {
 		this.repoName = repoName;
 	}
-	public String getAuthorProfile() {
-		return authorProfile;
-	}
-	public void setAuthorProfile(String authorProfile) {
-		this.authorProfile = authorProfile;
-	}
+//	public String getAuthorProfile() {
+//		return authorProfile;
+//	}
+//	public void setAuthorProfile(String authorProfile) {
+//		this.authorProfile = authorProfile;
+//	}
 	public String getRepourl() {
 		return repourl;
 	}
 	public void setRepourl(String repourl) {
 		this.repourl = repourl;
 	}
-	public String getCreatedAt() {
-		return createdAt;
-	}
-	public void setCreatedAt(String createdAt) {
-		
-		this.createdAt = createdAt;
-	}
-	public String getUpdatedAt() {
-		return updatedAt;
-	}
-	public void setUpdatedAt(String updatedAt) {
-		this.updatedAt = updatedAt;
-	}
+//	public String getCreatedAt() {
+//		return createdAt;
+//	}
+//	public void setCreatedAt(String createdAt) {
+//		
+//		this.createdAt = createdAt;
+//	}
+//	public String getUpdatedAt() {
+//		return updatedAt;
+//	}
+//	public void setUpdatedAt(String updatedAt) {
+//		this.updatedAt = updatedAt;
+//	}
 	public String getGitCommitsurl() {
 		return gitCommitsurl;
 	}
@@ -82,6 +85,12 @@ public class Repository {
 		this.issuesUrl = issuesUrl;
 	}
 	
+	public ArrayList<String> getTopics(){
+		return topics;
+	}
 	
+	public void setTopics(ArrayList<String> topics) {
+		this.topics = topics;
+	}
 	
 }

@@ -7,8 +7,10 @@
   <a href="@routes.HomeController.collaborators(r.id)">@r.login</a>
   &nbsp;|&nbsp;
   <a href="@routes.HomeController.repo(r.id)">@r.repoName</a>
-  
   </br>
   
+  @for(t <- r.topics){
+    <p> @t </p>
+  }
   }
 }

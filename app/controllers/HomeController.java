@@ -2,6 +2,7 @@ package controllers;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletionStage;
 
 import javax.inject.Inject;
 
@@ -39,38 +40,32 @@ public class HomeController extends Controller {
 		this.formFactory = formFactory;
 	}
 	
-	
 	public List<String> keywords;
-	
 	    public Result index() {
         return ok("Hello world");
     }
     
-    public Result create(Http.Request request) {		
+    public Result create(Http.Request request) {
     	repoForm = formFactory.form(RepoData.class);
     	System.out.println("In create");
     	return ok(views.html.create.render(repoForm,request,messagesApi.preferred(request)));
     }
     
-    public Result save(Http.Request request) {
+    public CompletionStage<Result> save(Http.Request request) {
+    	
     	Form<RepoData> repoForm = formFactory.form(RepoData.class);
-    	repos = repoForm.bindFromRequest(request).get();  	
+    	repos = repoForm.bindFromRequest(request).get();
     	String keyword= repos.getKeyword();
-    	String[] words = keyword.split(" ");
-    	keywords = Arrays.asList(words);
-    	System.out.println(keywords);
-    	List<Repository> repo = Search.findrepo(keywords);
-    	return ok(views.html.index.render(repo));
+    	System.out.println(keyword);
+    	return Search.getRepoAndUserDetails(keyword).thenApplyAsync((repo -> ok(views.html.index.render(repo)))); 
     }
     
     public Result collaborators(String id) {
-    	
     	for(Repository rd : Search.repos) {
     		if(id.equals(rd.id))
 			r= rd;
     	}
     	return ok(views.html.user.render(r));
-    	
     }
     
     public Result issues(String id) {
@@ -89,12 +84,9 @@ public class HomeController extends Controller {
 			r= rd;
     	}
     	return ok(views.html.commits.render(r));
-    	
-    	
     }
     
     public Result repo(String id)
-
     {
     	for(Repository rd : Search.repos) {
     		if(id.equals(rd.id))
@@ -105,11 +97,6 @@ public class HomeController extends Controller {
     	return ok(views.html.RepoView.render(r));
     	
     }
-    
-    
- 
-    
-
 }
 
 //Example form injecting a messagesAction
