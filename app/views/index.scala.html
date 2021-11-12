@@ -1,16 +1,37 @@
 @(repos : List[Repository])
 
 @main("Welcome to Gitterific") {
-  <h1>Welcome to Gitterific</h1>
+
+<html>
+	<head>
+		<title>Repository Results</title>
+		<link rel="stylesheet" type="text/css" 
+                       href='@routes.Assets.versioned("stylesheets/resultsStyle.css")'>
+   </head>
+<body>	
+ 
+  <div class = "result-div">
+ 
   @for(r<-repos){
-  
-  <a href="@routes.HomeController.collaborators(r.id)">@r.login</a>
-  &nbsp;|&nbsp;
-  <a href="@routes.HomeController.repo(r.id)">@r.repoName</a>
-  </br>
-  
+ 
+ 	<div class = "result-details">
+ 		<p> User: <a href="@routes.HomeController.collaborators(r.id)">@r.login</a> </p>
+        <p> Repository:	<a href="@routes.HomeController.repo(r.id)">@r.repoName</a> </p>
+  		<p> Topics: </p>	
+  		
+  		@if(r.topics.size() == 0){
+  		<p class ="empty-topic"> - </p> 
+  		}
+  		
   @for(t <- r.topics){
-    <p> @t </p>
+   <li>@t</li>
   }
+  	</div>
   }
+ 
+ 
+ </div>
+ 
+ </body> 
+ </html>
 }
