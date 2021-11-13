@@ -79,6 +79,15 @@ public class Search extends Controller{
 	public static void getInfoFromJson(JSONObject repository) {
 		Repository obj = new Repository();
 		
+		obj.setVisibility(repository.getString("visibility"));
+		obj.setForks(repository.getInt("forks"));
+		obj.setWatchers_count(repository.getInt("watchers_count"));
+		obj.setScore(repository.getInt("score"));
+		obj.setStars(repository.getInt("stargazers_count"));
+		obj.setCreatedAt(repository.getString("created_at").substring(0,10));
+		
+		
+		
 		JSONObject owner = (JSONObject) repository.get("owner");
 		
 		obj.setLogin(owner.getString("login"));

@@ -10,7 +10,7 @@ public class Repository {
 //	public String authorProfile;
 	public String id;
 	public String repourl;
-//	public String createdAt;
+	public String createdAt;
 //	public String updatedAt;
 	public String gitCommitsurl;
 	public String commitsUrl;
@@ -18,6 +18,58 @@ public class Repository {
 	public String repoName;
 	public String login;
 	public ArrayList<String> topics;
+	public int forks;
+	public int watchers_count;
+	public int score;
+	public int stars;
+	public String language;
+	public String visibility;
+	
+	 
+	
+	public String getLanguage() {
+		return language;
+	}
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+	public int getStars() {
+		return stars;
+	}
+	public void setStars(int stars) {
+		this.stars = stars;
+	}
+	public String getCreatedAt() {
+		return createdAt;
+	}
+	public void setCreatedAt(String createdAt) {
+		this.createdAt = createdAt;
+	}
+	public int getForks() {
+		return forks;
+	}
+	public void setForks(int forks) {
+		this.forks = forks;
+	}
+	public int getWatchers_count() {
+		return watchers_count;
+	}
+	public void setWatchers_count(int watchers_count) {
+		this.watchers_count = watchers_count;
+	}
+	public int getScore() {
+		return score;
+	}
+	public void setScore(int score) {
+		this.score = score;
+	}
+	public String getVisibility() {
+		return visibility;
+	}
+	public void setVisibility(String visibility) {
+		this.visibility = visibility;
+	}
+
 	
 	
 	

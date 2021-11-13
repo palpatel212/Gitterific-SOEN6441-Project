@@ -1,13 +1,137 @@
 @(r : Repository)
 
 @main("Welcome to Gitterific") {
-  <h1>Welcome to Repos</h1>
+<style>
+.welcome-div{background-color: black;color: white;margin-top: -11px;margin-left: -10px;margin-right: -9px; text-align: center; }
+.welcome-div h1{font-size: 17px;padding: 3px;font-family: monospace;}
+.title-div{background: #f6f8fa;margin-top: -9px;color: #0969da;display: flex;font-style: oblique;}
+.title-div h1{font-size: 16px;font-weight: 500;padding-top: 13px;}  
+.title-div h3{font-size: 14px;font-weight: 700;}  
+.title-div p{font-family: arial; margin-left: 10px;border: 1px solid black;border-radius: 11px; height: 15px;margin-top: 23px; padding: 1px 4px; color: black; font-size: 13px;}
+table, th, td {border:1px solid black;}
+.tab{overflow: hidden; border: 1px solid #ccc; background-color: #f1f1f1;}
+.tab button {background-color: inherit;float: left;border: none;outline: none;cursor: pointer;padding: 14px 16px;transition: 0.3s;font-size: 17px;}
+.tab button:hover{background-color: #ddd;}
+.tab button.active { background-color: #ccc;}
+.tabcontent {display: none;padding: 6px 12px;border: 1px solid #ccc; border-top: none;}
+.detail-box { display: flex;  margin-right: 10px;}
+.detail-box h3{margin-top: 23px;font-size: 16px;}
+.body-div{display: flex;}
+.tab-section{display:block; width:70%;}
+.topic-box{width: 30%;}
+.tab-content{width: 70%;}
+.topic-title h1{ font-size: 19px;font-family: ui-sans-serif;background-color: #DDD;margin: 0;padding: 14px;}
+.language, .topics{margin-left:10px;}
+.language{display:flex;}
+.language h1, .topics h1{font-size: 19px}
+.language h2{font-size: 17px;font-family: monospace;padding-left: 11px;color: #0969da;}
+.topics li{font-size: 17px;font-family: monospace;padding-left: 11px;color: #0969da;}
+.tabcontent{min-height: 1000px;}
+
+</style>
+
+<html>
+
+  <head>
+		<title>Repos</title>
+  </head>
+  <body>
+  <div class= "welcome-div">
+   <h1> Welcome to Gitterific!/ Repository Details </h1>
+  </div>
+  <div class="title-div">
+  <h1>Repository /</h1><h2>@r.repoName</h2> <p> @r.visibility </p> 
+   <div class= "detail-box" style="margin-left: 28%;"><h3> Watchers Count </h3><p> @r.watchers_count </p> </div>
+   <div class= "detail-box"><h3> Forks </h3><p> @r.forks </p> </div>
+   <div class= "detail-box"><h3> Created on </h3><p> @r.createdAt </p> </div>
+   <div class= "detail-box"><h3> Score </h3><p> @r.score </p> </div>
+   <div class= "detail-box"><h3> Stars </h3><p> @r.stars </p> </div>
+  </div>
+
+
   
+  <div class = "body-div">
+ <div class ="tab-section">
+  <div class="tab">
+  <button class="tablinks" onclick="openCity(event, 'collaborators')">Collaborators</button>
+  <button class="tablinks" onclick="openCity(event, 'issues')">Issues</button>
+  <button class="tablinks" onclick="openCity(event, 'commits')">Commits</button>
+  </div>
+  
+  
+  <div id="collaborators" class="tabcontent">
+  <h3>Collabartors</h3>
+  <table>
+  <tr>
+    <td>Visibility</td>
+    <td>@r.visibility</td>
+  </tr>
+  <tr>
+    <td>Forks</td>
+    <td>@r.forks</td>
+  </tr>
+  <tr>
+    <td>Watchers Count</td>
+    <td>@r.watchers_count</td>
+  </tr>
+</table> 
+</div>
+
+<div id="issues" class="tabcontent">
+  <h3>Issues</h3>
+
+</div>
+
+<div id="commits" class="tabcontent">
+  <h3>Commits</h3>
+</div>
+</div>
+
+
+ <div class = "topic-box">
+	<div class ="topic-title">
+	 <h1> Other Details </h1>
+	</div>
+   	<div class="language">
+ 		 <h1> Language: </h1> 
+   	</div>
+    <div class="topics">
+  		<h1> Topics: </h1> 
+  		@for(t <- r.topics){
+   				<li>@t</li>
+  		}
+    </div>
+  </div>
+  </div>
+  
+    
+
+
+
 
   <a href="@routes.HomeController.collaborators(r.id)">Collaborators</a>
   <a href="@routes.HomeController.issues(r.id)">Issues</a>
   <a href="@routes.HomeController.commits(r.id)">Commits</a>
   
+<script>
+
+function openCity(evt, cityName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(cityName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+
+</script>
  
+ </body>
+ </html>
   
 }
