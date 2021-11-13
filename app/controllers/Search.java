@@ -9,7 +9,9 @@ import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
@@ -107,7 +109,14 @@ public class Search extends Controller{
 	public static CompletionStage<List<Repository>> getRepoAndUserDetails(String word) {
 		CompletableFuture<List<Repository>> future = new CompletableFuture<>();
 		
-		searchRepos(word).thenAccept(json -> {
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("accept", "application/vnd.github.v3+json");
+		map.put("per_page", "10");
+		map.put("q", word);
+		
+		String url = "https://api.github.com/search/repositories";
+		
+		ApiCall.getApiCall(url, map).thenAccept(json -> {
 			System.out.println(json.toString(4));
 			
 //			CompletionStage<Done> result = cache.set("item.key", json.toString());
