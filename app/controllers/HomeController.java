@@ -1,11 +1,27 @@
 package controllers;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
 
 import javax.inject.Inject;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import models.Commits;
 import models.RepoData;
 import models.Repository;
 import play.data.Form;
@@ -30,6 +46,7 @@ public class HomeController extends Controller {
      * this method will be called when the application receives a
      * <code>GET</code> request with a path of <code>/</code>.
      */
+	public List<Commits> com = new ArrayList<Commits>();
 	static RepoData repos;
 	Repository r= new Repository();
 	FormFactory formFactory;
@@ -81,10 +98,15 @@ public class HomeController extends Controller {
     }
     public Result commits(String id) {
     	for(Repository rd : Search.repos) {
-    		if(id.equals(rd.id))
+    		if(id.equals(rd.id)) {
 			r= rd;
+    		System.out.println("found repo");
+    		}
     	}
-    	return ok(views.html.commits.render(r));
+    	
+    	findcommit();
+    	
+    	return ok(views.html.commits.render(com));
     }
     
     public Result repo(String id)
@@ -98,6 +120,53 @@ public class HomeController extends Controller {
     	return ok(views.html.RepoView.render(r));
     	
     }
-}
+    public void findcommit() {
+    	
+    	JSONArray jsonObject = null;
+    	try {
+    		System.out.println("Calling commit API by passing two arguements");
+    		URIBuilder builder = new URIBuilder("https://api.github.com/repos/"+r.login+"/"+r.repoName+"/commits");
+    		builder.addParameter("accept", "application/vnd.github.v3+json");
+    		builder.addParameter("per_page", "100");
+    	
+    		CloseableHttpClient httpclient = HttpClients.createDefault();
 
-//Example form injecting a messagesAction
+    		HttpResponse resp = null;
+    		
+    		
+    		HttpGet getAPI = new HttpGet(builder.build());
+    		resp = httpclient.execute(getAPI);
+    		
+    		StatusLine statusLine = resp.getStatusLine();
+            System.out.println(statusLine.getStatusCode() + " " + statusLine.getReasonPhrase());
+            String responseBody = EntityUtils.toString(resp.getEntity(), StandardCharsets.UTF_8);
+            System.out.println(responseBody.length());
+           
+    		try {
+    		     jsonObject = new JSONArray(responseBody);
+    		}catch (JSONException err){
+    		     err.printStackTrace();
+    		}
+    		
+    	} catch (URISyntaxException | IOException | RuntimeException e) {
+    		// TODO Auto-generated catch block
+    		e.printStackTrace();
+    	}
+    	
+    	com.clear();
+    	System.out.println("JSON value"+jsonObject);
+    	System.out.println("In find commit function");
+    	for(int i=0; i<jsonObject.length(); i++) {
+    		Commits obj = new Commits();
+    		System.out.println("Commit object created");
+    		String commitUrl= jsonObject.getJSONObject(i).getString("url");
+    		obj.setCommitUrl(commitUrl);
+    		System.out.println("url object created");
+    		JSONObject tempt = (JSONObject)jsonObject.getJSONObject(i).get("commit");
+    		String commitName= (String)tempt.getString("message");
+    		obj.setCommitName(commitName);	
+    		System.out.println("message created");
+    		com.add(obj);
+    	}
+    }
+}
