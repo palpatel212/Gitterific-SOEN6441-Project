@@ -1,12 +1,30 @@
-@(r : Repository)
+@(com : List[Commits])
+
+@main("Welcome to Gitterific") {
 
 <html>
 	<head>
-		<title>User page</title>
-	</head>
-	<body>
-	
-	<p>@r.login</p>
-	</body>
-	
-</html>
+		<title>Commit Results</title>
+		<link rel="stylesheet" type="text/css" 
+                       href='@routes.Assets.versioned("stylesheets/resultsStyle.css")'>
+   </head>
+<body>	
+  <h1> Recent 100 Commits</h1>
+  
+  <a href="#"> Commit statistics </a>
+  <div class = "result-div">
+ 
+  @for(c<-com){
+ 
+ 	<div class = "result-details">
+ 		<p> Message : @c.commitName</p>
+        
+  	</div>
+  }
+ 
+ 
+ </div>
+ 
+ </body> 
+ </html>
+}
