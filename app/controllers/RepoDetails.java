@@ -37,7 +37,7 @@ import javax.inject.Inject;
 public class RepoDetails {
 
 	static public List<Repository> repos = new ArrayList<Repository>();
-	public static void getRepoInfo(JSONObject repository) {
+	public static void setRepoDetails(JSONObject repository) {
 		Repository obj = new Repository();
 		
 		obj.setVisibility(repository.getString("visibility"));
@@ -73,7 +73,7 @@ public class RepoDetails {
 		repos.add(obj);
 	}
 	
-	public static List<Repository> getRepoAndUserDetails(String word) {
+	public static List<Repository> getRepoDetails(String word) {
 //		CompletableFuture<List<Repository>> future = new CompletableFuture<>();
 		
 		HashMap<String, String> map = new HashMap<String, String>();
