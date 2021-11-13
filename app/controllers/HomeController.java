@@ -6,6 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 import javax.inject.Inject;
@@ -75,11 +76,13 @@ public class HomeController extends Controller {
     	repos = repoForm.bindFromRequest(request).get();
     	String keyword= repos.getKeyword();
     	System.out.println(keyword);
-    	return Search.getRepoAndUserDetails(keyword).thenApplyAsync((repo -> ok(views.html.index.render(repo)))); 
+    	return CompletableFuture.supplyAsync(() -> {
+    		return RepoDetails.getRepoAndUserDetails(keyword);
+    	}).thenApply(repo -> ok(views.html.index.render(repo)));
     }
     
     public Result collaborators(String id) {
-    	for(Repository rd : Search.repos) {
+    	for(Repository rd : RepoDetails.repos) {
     		if(id.equals(rd.id))
 			r= rd;
     	}
@@ -88,16 +91,22 @@ public class HomeController extends Controller {
     
     public Result issues(String id) {
     	
-    	for(Repository rd : Search.repos) {
+    	for(Repository rd : RepoDetails.repos) {
     		if(id.equals(rd.id))
 			r= rd;
     	}
+    	
+    	RepoIssues.getIssueList(r);
     	return ok(views.html.issues.render(r));
+//    	return CompletableFuture.supplyAsync(() -> {
+//    		return RepoIssues.getIssueList(r);
+//    	}).thenApply(repo -> ok(views.html.index.render(repo)));
+//    	return ok(views.html.issues.render(r));
     	
     	
     }
     public Result commits(String id) {
-    	for(Repository rd : Search.repos) {
+    	for(Repository rd : RepoDetails.repos) {
     		if(id.equals(rd.id)) {
 			r= rd;
     		System.out.println("found repo");
@@ -111,7 +120,7 @@ public class HomeController extends Controller {
     
     public Result repo(String id)
     {
-    	for(Repository rd : Search.repos) {
+    	for(Repository rd : RepoDetails.repos) {
     		if(id.equals(rd.id))
 			r= rd;
     	}

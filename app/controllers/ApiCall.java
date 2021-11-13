@@ -22,9 +22,10 @@ import org.json.JSONObject;
 
 public class ApiCall {
 	
-	public static CompletionStage<JSONObject> getApiCall(String url, HashMap<String, String> queryParamters) {
-		CompletableFuture<JSONObject> future = new CompletableFuture<>();
-		JSONObject jsonObject = null;
+	public static CompletionStage<String> getApiCall(String url, HashMap<String, String> queryParamters) {
+		CompletableFuture<String> future = new CompletableFuture<>();
+//		JSONObject jsonObject = null;
+		String responseBody = null;
 		
 		try {
 			URIBuilder builder = new URIBuilder(url);
@@ -40,14 +41,14 @@ public class ApiCall {
     		
     		StatusLine statusLine = resp.getStatusLine();
             System.out.println(statusLine.getStatusCode() + " " + statusLine.getReasonPhrase());
-            String responseBody = EntityUtils.toString(resp.getEntity(), StandardCharsets.UTF_8);
+            responseBody = EntityUtils.toString(resp.getEntity(), StandardCharsets.UTF_8);
             System.out.println(responseBody.length());
             
-            try {
-	        	jsonObject = new JSONObject(responseBody);
-	        } catch (JSONException err){
-			     err.printStackTrace();
-			}
+//            try {
+//	        	jsonObject = new JSONObject(responseBody);
+//	        } catch (JSONException err){
+//			     err.printStackTrace();
+//			}
 			
 		} catch (URISyntaxException e) {
 			// TODO Auto-generated catch block
@@ -59,7 +60,7 @@ public class ApiCall {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		future.complete(jsonObject);
+		future.complete(responseBody);
 		return future;
 	}
 	

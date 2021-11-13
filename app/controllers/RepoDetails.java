@@ -34,49 +34,10 @@ import play.mvc.*;
 import javax.inject.Inject;
 
 
-public class Search extends Controller{
+public class RepoDetails {
 
 	static public List<Repository> repos = new ArrayList<Repository>();
-	static public List<Repository> repoDetail = new ArrayList<Repository>();
-	private AsyncCacheApi cache;
-	
-	public static CompletionStage<JSONObject> searchRepos(String word) {
-		CompletableFuture<JSONObject> future = new CompletableFuture<>();
-		JSONObject jsonObject = null;
-		try {
-			
-			URIBuilder builder = new URIBuilder("https://api.github.com/search/repositories");
-			builder.addParameter("accept", "application/vnd.github.v3+json");
-			builder.addParameter("per_page", "10");
-			builder.addParameter("q", word);
-			CloseableHttpClient httpclient = HttpClients.createDefault();
-			
-			HttpResponse resp = null;
-			
-			HttpGet getAPI = new HttpGet(builder.build());
-			resp = httpclient.execute(getAPI);
-			
-			StatusLine statusLine = resp.getStatusLine();
-	        System.out.println(statusLine.getStatusCode() + " " + statusLine.getReasonPhrase());
-	        String responseBody = EntityUtils.toString(resp.getEntity(), StandardCharsets.UTF_8);
-	        System.out.println(responseBody.length());
-	        
-	        try {
-	        	jsonObject = new JSONObject(responseBody);
-	        } catch (JSONException err){
-			     err.printStackTrace();
-			}
-			
-		} catch (URISyntaxException | IOException | RuntimeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		future.complete(jsonObject);
-		return future;
-	}
-	
-	public static void getInfoFromJson(JSONObject repository) {
+	public static void getRepoInfo(JSONObject repository) {
 		Repository obj = new Repository();
 		
 		obj.setVisibility(repository.getString("visibility"));
@@ -92,15 +53,12 @@ public class Search extends Controller{
 		
 		obj.setLogin(owner.getString("login"));
 		obj.setRepourl(owner.getString("repos_url"));
-//		obj.setCreatedAt(repository.getString("created_at"));
 		obj.setRepoName(repository.getString("name"));
 		
 		Number id= repository.getNumber("id");
 		String idtemp=id.toString();
 		System.out.println("ID String"+idtemp);
 		obj.setId(idtemp);
-		
-//		obj.setUpdatedAt(repository.getString("updated_at"));
 		obj.setGitCommitsurl(repository.getString("git_commits_url"));
 		obj.setCommitsUrl(repository.getString("commits_url"));
 		obj.setIssuesUrl(repository.getString("issues_url"));
@@ -115,8 +73,8 @@ public class Search extends Controller{
 		repos.add(obj);
 	}
 	
-	public static CompletionStage<List<Repository>> getRepoAndUserDetails(String word) {
-		CompletableFuture<List<Repository>> future = new CompletableFuture<>();
+	public static List<Repository> getRepoAndUserDetails(String word) {
+//		CompletableFuture<List<Repository>> future = new CompletableFuture<>();
 		
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("accept", "application/vnd.github.v3+json");
@@ -125,9 +83,9 @@ public class Search extends Controller{
 		
 		String url = "https://api.github.com/search/repositories";
 		
-		ApiCall.getApiCall(url, map).thenAccept(json -> {
+		ApiCall.getApiCall(url, map).thenAccept(responseBody -> {
+			JSONObject json = new JSONObject(responseBody);
 			System.out.println(json.toString(4));
-			
 //			CompletionStage<Done> result = cache.set("item.key", json.toString());
 			repos.clear();
 			org.json.JSONArray array = json.getJSONArray("items");
@@ -137,12 +95,12 @@ public class Search extends Controller{
 				listData.add(array.optJSONObject(i));
 			}
 			
-			listData.parallelStream().forEach(Search::getInfoFromJson);
+			listData.parallelStream().forEach(RepoDetails::getRepoInfo);
 		});
 		
-		future.complete(repos);
+//		future.complete(repos);
 		
-		return future;
+		return repos;
 	}
 	
 }
