@@ -95,7 +95,7 @@ public class RepoDetails {
 				listData.add(array.optJSONObject(i));
 			}
 			
-			listData.parallelStream().forEach(RepoDetails::getRepoInfo);
+			listData.parallelStream().forEach(RepoDetails::setRepoDetails);
 		});
 		
 //		future.complete(repos);

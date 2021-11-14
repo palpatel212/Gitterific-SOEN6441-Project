@@ -77,7 +77,7 @@ public class HomeController extends Controller {
     	String keyword= repos.getKeyword();
     	System.out.println(keyword);
     	return CompletableFuture.supplyAsync(() -> {
-    		return RepoDetails.getRepoAndUserDetails(keyword);
+    		return RepoDetails.getRepoDetails(keyword);
     	}).thenApply(repo -> ok(views.html.index.render(repo)));
     }
     
