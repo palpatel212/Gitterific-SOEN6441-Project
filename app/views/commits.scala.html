@@ -11,13 +11,18 @@
 <body>	
   <h1> Recent 100 Commits</h1>
   
-  <a href="#"> Commit statistics </a>
+  <a href="@routes.HomeController.commitStats()"> Commit statistics </a>
   <div class = "result-div">
  
   @for(c<-com){
  
  	<div class = "result-details">
  		<p> Message : @c.commitName</p>
+ 		<p> Url : @c.commitUrl</p>
+ 		<p> Committer Name : @c.committerName </p>
+ 		<p> Committer ID : @c.committerId</p>
+ 		<p> Addition : @c.addition</p>
+ 		<p> Deletion : @c.deletion</p>
         
   	</div>
   }
