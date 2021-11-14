@@ -1,14 +1,52 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.List;
+
+
+import controllers.UserController;
 
 public class User {
 	public String repoURL;
+	public Integer following;
+	public Integer followers;
+	public String Name;
+	public Integer publicRepos;
 	public String followingURL;
 	public String followersURL;
 	public String htmlURL;
-	public String Login;
+	public String login;
 	public String AvatarURL;
+	public ArrayList<String> UserRepos;
+
+	
+	
+	public ArrayList<String> getUserRepos() {
+		return UserRepos;
+	}
+	public void setUserRepos(String repoURL) {
+		UserRepos=UserController.listUserRepos(repoURL);
+		
+		
+	}
+	public Integer getFollowers() {
+		return followers;
+	}
+	public void setFollowers(Integer followers) {
+		this.followers = followers;
+	}
+	public String getName() {
+		return Name;
+	}
+	public void setName(String name) {
+		Name = name;
+	}
+	public Integer getPublicRepos() {
+		return publicRepos;
+	}
+	public void setPublicRepos(Integer publicRepos) {
+		this.publicRepos = publicRepos;
+	}
 	public String getRepoURL() {
 		return repoURL;
 	}
@@ -34,16 +72,22 @@ public class User {
 		this.htmlURL = htmlURL;
 	}
 	public String getLogin() {
-		return Login;
+		return login;
 	}
 	public void setLogin(String login) {
-		Login = login;
+		this.login = login;
 	}
 	public String getAvatarURL() {
 		return AvatarURL;
 	}
 	public void setAvatarURL(String avatarURL) {
 		AvatarURL = avatarURL;
+	}
+	public Integer getFollowing() {
+		return following;
+	}
+	public void setFollowing(Integer following) {
+		this.following = following;
 	}
 	
 	
