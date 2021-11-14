@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.OptionalDouble;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.stream.Collectors;
@@ -58,6 +59,14 @@ public class HomeController extends Controller {
 	public List<Commits> com = new ArrayList<Commits>();
 	public List<Committer> committers = new ArrayList<Committer>();
 	public HashMap<String, Integer> sorted;
+	public List<Integer> additionResult = new ArrayList<Integer>();
+	public List<Integer> deletionResult = new ArrayList<Integer>();
+	public Integer maxAdd;
+	public Integer maxDel;
+	public Integer minAdd;
+	public Integer minDel;
+	public OptionalDouble avgAdd;
+	public OptionalDouble avgDel;
 	static RepoData repos;
 	Repository r= new Repository();
 	FormFactory formFactory;
@@ -154,6 +163,9 @@ public class HomeController extends Controller {
     public Result commitStats() {
     	
         
+    	additionResult.clear();
+    	deletionResult.clear();
+    	
     	int count =0;
     	committers.clear();
     	Iterator hmIterator = sorted.entrySet().iterator();
@@ -167,13 +179,45 @@ public class HomeController extends Controller {
             committers.add(c);
             count++;
         }
-    	return ok(views.html.commitSats.render(committers));
+    	
+    	for(Commits c:com) {
+    			JSONObject results = addDelStats(c.commitUrl);
+	    		System.out.println("Result object created.");
+				JSONObject temptStats = (JSONObject)results.get("stats");
+				if(!JSONObject.NULL.equals(temptStats)) {
+					System.out.println("In stats object");
+					Integer addition = (Integer)temptStats.getInt("additions");
+					additionResult.add(addition);
+					Integer deletion = (Integer)temptStats.getInt("deletions");
+					deletionResult.add(deletion);
+				}
+				avgAdd = additionResult
+			            .stream()
+			            .mapToDouble(a -> a)
+			            .average();
+				
+				
+				avgDel = deletionResult
+			            .stream()
+			            .mapToDouble(a -> a)
+			            .average();
+				
+				maxAdd = additionResult.stream().collect(Collectors.summarizingInt(Integer::intValue)).getMax();
+				maxDel = deletionResult.stream().collect(Collectors.summarizingInt(Integer::intValue)).getMax();
+				
+				minAdd = additionResult.stream().collect(Collectors.summarizingInt(Integer::intValue)).getMin();
+				minDel = deletionResult.stream().collect(Collectors.summarizingInt(Integer::intValue)).getMin();	
+				
+				}
+        
+    	
+    	return ok(views.html.commitSats.render(committers,avgAdd,avgDel,maxAdd,maxDel,minAdd,minDel));
     	
     }
     
-    public void findcommit() {
+public void findcommit() {
 	  	
-    	
+    	System.out.println("In find commit");
 		
   		JSONArray jsonObject = null;
   		
@@ -182,6 +226,7 @@ public class HomeController extends Controller {
   			URIBuilder builder = new URIBuilder("https://api.github.com/repos/"+r.login+"/"+r.repoName+"/commits");
   			builder.addParameter("accept", "application/vnd.github.v3+json");
   			builder.addParameter("X-RateLimit-Reset", "1350085394");
+  			builder.addParameter("per_page", "10");
   			
   			CloseableHttpClient httpclient = HttpClients.createDefault();
 
@@ -212,12 +257,12 @@ public class HomeController extends Controller {
       	
       	com.clear();
       	committers.clear();
-//      	System.out.println("JSON value"+jsonObject);
+     	System.out.println("JSON value"+jsonObject);
       	System.out.println("In find commit function");
       	for(int i=0; i<jsonObject.length(); i++) {
       		Commits obj = new Commits();
       		System.out.println("Commit object created");
-      	//	if(!JSONObject.NULL.equals(jsonObject.getJSONObject(i))) {
+      		if(!JSONObject.NULL.equals(jsonObject.getJSONObject(i))) {
   	    		String commitUrl= jsonObject.getJSONObject(i).getString("url");
   	    		obj.setCommitUrl(commitUrl);
   	    		System.out.println("url object created");
@@ -229,18 +274,11 @@ public class HomeController extends Controller {
   	    		JSONObject tempt = (JSONObject)jsonObject.getJSONObject(i).get("commit");
   	    		String commitName= (String)tempt.getString("message");
   	    		obj.setCommitName(commitName);	
-  	    		//JSONObject results = addDelStats(obj.commitUrl);
-  	    		//System.out.println("Result object created.");
-  				//JSONObject temptStats = (JSONObject)results.get("stats");
-  				//System.out.println("In stats object");
-  				//Integer addition = (Integer)temptStats.getInt("additions");
-  				//obj.setAddition(addition);
-  				//Integer deletion = (Integer)temptStats.getInt("deletions");
-  				//obj.setDeletion(deletion);
-  	    		System.out.println("message created");
   	    		obj.updateMap();
   	    		com.add(obj);
-      	//	}
+  	    		
+  	    		
+      		}
       	}
       	
       	HashMap<String, Integer> temp =Commits.countMap.entrySet()
@@ -257,5 +295,37 @@ public class HomeController extends Controller {
       	sorted = temp.entrySet() .stream() .sorted(Collections.reverseOrder(Map.Entry.comparingByValue())) .collect( Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2, LinkedHashMap::new));
 
       }
-    }
+    
+public static JSONObject addDelStats(String url) {
+		
+		JSONObject jsonObject = null;
+		try {
+			URIBuilder builder = new URIBuilder(url);
+			builder.addParameter("accept", "application/vnd.github.v3+json");
+			CloseableHttpClient httpclient = HttpClients.createDefault();
+
+			HttpResponse resp = null;
+			
+			
+			HttpGet getAPI = new HttpGet(builder.build());
+			resp = httpclient.execute(getAPI);
+			
+			StatusLine statusLine = resp.getStatusLine();
+	        System.out.println(statusLine.getStatusCode() + " " + statusLine.getReasonPhrase());
+	        String responseBody = EntityUtils.toString(resp.getEntity(), StandardCharsets.UTF_8);
+	        System.out.println(responseBody.length());
+	        
+			try {
+			     jsonObject = new JSONObject(responseBody);
+			}catch (JSONException err){
+			     err.printStackTrace();
+			}
+			
+		} catch (URISyntaxException | IOException | RuntimeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return jsonObject;
+	}
+  }
 
