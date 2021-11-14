@@ -10,7 +10,8 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 
 GET 	/create  			        controllers.HomeController.create(request : Request)
 POST 	/create						controllers.HomeController.save(request : Request)
-GET    /user/:id                        controllers.HomeController.collaborators(id : String)
+GET    /user/:login                        controllers.HomeController.userinfo(login : String)
 GET    /issues/:id                        controllers.HomeController.issues(id : String)
 GET    /commits/:id                        controllers.HomeController.commits(id : String)
 GET    /check/:id                       controllers.HomeController.repo(id : String)
+GET    /collaborators/:id                controllers.HomeController.collaborators(id : String)
