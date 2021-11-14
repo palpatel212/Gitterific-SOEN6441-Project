@@ -1,20 +1,15 @@
 package controllers;
-
 import java.io.IOException;
-
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
-
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -23,7 +18,6 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import models.Repository;
 import models.User;
 import play.mvc.Controller;
@@ -35,7 +29,6 @@ import javax.inject.Inject;
 
 
 public class RepoDetails {
-
 	static public List<Repository> repos = new ArrayList<Repository>();
 	public static void setRepoDetails(JSONObject repository) {
 		Repository obj = new Repository();
@@ -98,9 +91,8 @@ public class RepoDetails {
 			listData.parallelStream().forEach(RepoDetails::setRepoDetails);
 		});
 		
-//		future.complete(repos);
+		//		future.complete(repos);
 		
 		return repos;
 	}
-	
 }

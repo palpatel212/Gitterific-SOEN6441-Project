@@ -99,16 +99,19 @@ public class HomeController extends Controller {
     	return ok(views.html.collaborators.render(r));
     }
     
-    
-    public Result issues(String id) {
+    public CompletionStage<Result> issues(String id) {
     	
     	for(Repository rd : RepoDetails.repos) {
     		if(id.equals(rd.id))
 			r= rd;
     	}
     	
-    	RepoIssues.getIssueList(r);
-    	return ok(views.html.issues.render(r));
+    	return CompletableFuture.supplyAsync(() -> {
+    		return RepoIssues.getIssueList(r);
+    	}).thenApply(issueList -> ok(views.html.issues.render(issueList)));
+    	
+//    	RepoIssues.getIssueList(r);
+//    	return ok(views.html.issues.render(r));
 //    	return CompletableFuture.supplyAsync(() -> {
 //    		return RepoIssues.getIssueList(r);
 //    	}).thenApply(repo -> ok(views.html.index.render(repo)));
@@ -142,7 +145,7 @@ public class HomeController extends Controller {
     		if(id.equals(rd.id))
 			r= rd;
     	}
-
+    	
     	System.out.println("Repos ID"+id);
     	return ok(views.html.RepoView.render(r));
     	

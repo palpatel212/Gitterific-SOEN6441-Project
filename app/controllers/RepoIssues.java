@@ -17,10 +17,15 @@ public class RepoIssues {
 	public static void setRepoIssueObject (JSONObject Issue) {
 		Issues issueObj = new Issues();
 		issueObj.setTitle(Issue.getString("title"));
+		issueObj.setCreated_at(Issue.getString("created_at"));
+		issueObj.setUpdated_at(Issue.getString("updated_at"));
+		issueObj.setNum(Issue.getInt("number"));
+		issueObj.setId(Issue.getInt("id"));
+		issueObj.setState(Issue.getString("state"));
 		IssueList.add(issueObj);
 	}
 	
-	public static void getIssueList(Repository repo){
+	public static List<Issues> getIssueList(Repository repo){
 		String issueURL = repo.getIssuesUrl();
 		String trimmedIssueURL = "";
 		int index = issueURL.indexOf("{");
@@ -34,6 +39,7 @@ public class RepoIssues {
 		ApiCall.getApiCall(trimmedIssueURL, map).thenAccept(reponseBody -> {
 			JSONArray IssueArray = new JSONArray(reponseBody);
 			
+			System.out.println(reponseBody);
 			ArrayList<JSONObject> listData = new ArrayList<JSONObject>();
 			for(int i=0; i<IssueArray.length();i++) {
 				listData.add(IssueArray.optJSONObject(i));
@@ -42,6 +48,6 @@ public class RepoIssues {
 			listData.parallelStream().forEach(RepoIssues::setRepoIssueObject);
 		});
 
-		return;
+		return IssueList;
 	}
 }
