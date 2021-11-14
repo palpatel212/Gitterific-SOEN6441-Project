@@ -25,6 +25,7 @@ import org.json.JSONObject;
 import models.Commits;
 import models.RepoData;
 import models.Repository;
+import models.User;
 import play.data.Form;
 import play.data.FormFactory;
 import play.i18n.MessagesApi;
@@ -86,8 +87,9 @@ public class HomeController extends Controller {
     		if(id.equals(rd.id))
 			r= rd;
     	}
-    	return ok(views.html.user.render(r));
+    	return ok(views.html.collaborators.render(r));
     }
+    
     
     public Result issues(String id) {
     	
@@ -105,6 +107,13 @@ public class HomeController extends Controller {
     	
     	
     }
+    
+    public Result userinfo(String login)
+    {
+    	User userDetail=UserController.storeUserInfo(UserController.UserApiCall(login));
+    	return ok(views.html.user.render(userDetail));
+    }
+    
     public Result commits(String id) {
     	for(Repository rd : RepoDetails.repos) {
     		if(id.equals(rd.id)) {
