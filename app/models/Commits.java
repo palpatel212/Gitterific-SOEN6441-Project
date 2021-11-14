@@ -1,16 +1,37 @@
 package models;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
 public class Commits {
 	
 		public static Integer totalCommits;
 		public String commitName;
 		public String commitUrl;
 		public String total;
-		public String addition;
-		public String deletion;
+		public Integer addition;
+		public Integer deletion;
+		public String committerName;
+		public Integer committerId;
+		public static HashMap<String,Integer> countMap = new HashMap<String, Integer>();
 		
 		
 		
+		
+		
+		public String getCommitterName() {
+			return committerName;
+		}
+		public void setCommitterName(String committerName) {
+			this.committerName = committerName;
+		}
+		public Integer getCommitterId() {
+			return committerId;
+		}
+		public void setCommitterId(Integer committerId) {
+			this.committerId = committerId;
+		}
 		public static Integer getTotalCommits() {
 			return totalCommits;
 		}
@@ -23,16 +44,16 @@ public class Commits {
 		public void setTotal(String total) {
 			this.total = total;
 		}
-		public String getAddition() {
+		public Integer getAddition() {
 			return addition;
 		}
-		public void setAddition(String addition) {
+		public void setAddition(Integer addition) {
 			this.addition = addition;
 		}
-		public String getDeletion() {
+		public Integer getDeletion() {
 			return deletion;
 		}
-		public void setDeletion(String deletion) {
+		public void setDeletion(Integer deletion) {
 			this.deletion = deletion;
 		}
 		public String getCommitName() {
@@ -46,6 +67,16 @@ public class Commits {
 		}
 		public void setCommitUrl(String commitUrl) {
 			this.commitUrl = commitUrl;
+		}
+		
+		public void updateMap() {
+			if(!countMap.containsKey(committerName)) {
+				countMap.put(committerName, 1);
+			}
+			else {
+				countMap.put(committerName,  countMap.get(committerName)+1);
+			}
+			System.out.println("Updated hashmap");
 		}
 		
 		
