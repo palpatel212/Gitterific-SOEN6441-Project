@@ -5,9 +5,15 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -23,6 +29,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import models.Commits;
+import models.Committer;
 import models.RepoData;
 import models.Repository;
 import models.User;
@@ -49,6 +56,8 @@ public class HomeController extends Controller {
      * <code>GET</code> request with a path of <code>/</code>.
      */
 	public List<Commits> com = new ArrayList<Commits>();
+	public List<Committer> committers = new ArrayList<Committer>();
+	public HashMap<String, Integer> sorted;
 	static RepoData repos;
 	Repository r= new Repository();
 	FormFactory formFactory;
@@ -138,53 +147,112 @@ public class HomeController extends Controller {
     	return ok(views.html.RepoView.render(r));
     	
     }
-    public void findcommit() {
+    
+    public Result commitStats() {
     	
-    	JSONArray jsonObject = null;
-    	try {
-    		System.out.println("Calling commit API by passing two arguements");
-    		URIBuilder builder = new URIBuilder("https://api.github.com/repos/"+r.login+"/"+r.repoName+"/commits");
-    		builder.addParameter("accept", "application/vnd.github.v3+json");
-    		builder.addParameter("per_page", "100");
+        
+    	int count =0;
+    	committers.clear();
+    	Iterator hmIterator = sorted.entrySet().iterator();
+    	while (hmIterator.hasNext()&& count<10) {
+            Map.Entry mapElement = (Map.Entry)hmIterator.next();
+            Committer c = new Committer();
+            String name = (String) mapElement.getKey(); 
+            c.setName(name);
+            Integer commitNum = (Integer) mapElement.getValue();
+            c.setCommitNum(commitNum);
+            committers.add(c);
+            count++;
+        }
+    	return ok(views.html.commitSats.render(committers));
     	
-    		CloseableHttpClient httpclient = HttpClients.createDefault();
-
-    		HttpResponse resp = null;
-    		
-    		
-    		HttpGet getAPI = new HttpGet(builder.build());
-    		resp = httpclient.execute(getAPI);
-    		
-    		StatusLine statusLine = resp.getStatusLine();
-            System.out.println(statusLine.getStatusCode() + " " + statusLine.getReasonPhrase());
-            String responseBody = EntityUtils.toString(resp.getEntity(), StandardCharsets.UTF_8);
-            System.out.println(responseBody.length());
-           
-    		try {
-    		     jsonObject = new JSONArray(responseBody);
-    		}catch (JSONException err){
-    		     err.printStackTrace();
-    		}
-    		
-    	} catch (URISyntaxException | IOException | RuntimeException e) {
-    		// TODO Auto-generated catch block
-    		e.printStackTrace();
-    	}
-    	
-    	com.clear();
-    	System.out.println("JSON value"+jsonObject);
-    	System.out.println("In find commit function");
-    	for(int i=0; i<jsonObject.length(); i++) {
-    		Commits obj = new Commits();
-    		System.out.println("Commit object created");
-    		String commitUrl= jsonObject.getJSONObject(i).getString("url");
-    		obj.setCommitUrl(commitUrl);
-    		System.out.println("url object created");
-    		JSONObject tempt = (JSONObject)jsonObject.getJSONObject(i).get("commit");
-    		String commitName= (String)tempt.getString("message");
-    		obj.setCommitName(commitName);	
-    		System.out.println("message created");
-    		com.add(obj);
-    	}
     }
-}
+    
+    public void findcommit() {
+	  	
+    	
+		
+  		JSONArray jsonObject = null;
+  		
+  		try {
+  			System.out.println("In URL Builder");
+  			URIBuilder builder = new URIBuilder("https://api.github.com/repos/"+r.login+"/"+r.repoName+"/commits");
+  			builder.addParameter("accept", "application/vnd.github.v3+json");
+  			builder.addParameter("X-RateLimit-Reset", "1350085394");
+  			
+  			CloseableHttpClient httpclient = HttpClients.createDefault();
+
+  			HttpResponse resp = null;
+  			
+  			
+  			
+  			HttpGet getAPI = new HttpGet(builder.build());
+  			resp = httpclient.execute(getAPI);
+  			
+  			StatusLine statusLine = resp.getStatusLine();
+  	        System.out.println(statusLine.getStatusCode() + " " + statusLine.getReasonPhrase());
+  	        String responseBody = EntityUtils.toString(resp.getEntity(), StandardCharsets.UTF_8);
+  	        System.out.println(responseBody.length());
+  	        
+  			try {
+  			     jsonObject = new JSONArray(responseBody);
+  			}catch (JSONException err){
+  			     err.printStackTrace();
+  			}
+  			
+  		} catch (URISyntaxException | IOException | RuntimeException e) {
+  			// TODO Auto-generated catch block
+  			e.printStackTrace();
+  		}
+  		
+  		
+      	
+      	com.clear();
+      	committers.clear();
+//      	System.out.println("JSON value"+jsonObject);
+      	System.out.println("In find commit function");
+      	for(int i=0; i<jsonObject.length(); i++) {
+      		Commits obj = new Commits();
+      		System.out.println("Commit object created");
+      	//	if(!JSONObject.NULL.equals(jsonObject.getJSONObject(i))) {
+  	    		String commitUrl= jsonObject.getJSONObject(i).getString("url");
+  	    		obj.setCommitUrl(commitUrl);
+  	    		System.out.println("url object created");
+  	    		JSONObject temptCommitter = (JSONObject)jsonObject.getJSONObject(i).get("author");
+  	    		String committerName= (String)temptCommitter.getString("login");
+  	    		obj.setCommitterName(committerName);
+  	    		Integer committerId= (Integer)temptCommitter.getNumber("id");
+  	    		obj.setCommitterId(committerId);
+  	    		JSONObject tempt = (JSONObject)jsonObject.getJSONObject(i).get("commit");
+  	    		String commitName= (String)tempt.getString("message");
+  	    		obj.setCommitName(commitName);	
+  	    		//JSONObject results = addDelStats(obj.commitUrl);
+  	    		//System.out.println("Result object created.");
+  				//JSONObject temptStats = (JSONObject)results.get("stats");
+  				//System.out.println("In stats object");
+  				//Integer addition = (Integer)temptStats.getInt("additions");
+  				//obj.setAddition(addition);
+  				//Integer deletion = (Integer)temptStats.getInt("deletions");
+  				//obj.setDeletion(deletion);
+  	    		System.out.println("message created");
+  	    		obj.updateMap();
+  	    		com.add(obj);
+      	//	}
+      	}
+      	
+      	HashMap<String, Integer> temp =Commits.countMap.entrySet()
+                .stream()
+                .sorted((i1, i2)
+                            -> i1.getValue().compareTo(
+                                i2.getValue()))
+                .collect(Collectors.toMap(
+                    Map.Entry::getKey,
+                    Map.Entry::getValue,
+                    (e1, e2) -> e1, LinkedHashMap::new));
+      	
+
+      	sorted = temp.entrySet() .stream() .sorted(Collections.reverseOrder(Map.Entry.comparingByValue())) .collect( Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2, LinkedHashMap::new));
+
+      }
+    }
+
