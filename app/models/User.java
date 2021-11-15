@@ -1,10 +1,11 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
-import controllers.UserController;
+import controllers.UserDetails;
 
 public class User {
 	public String repoURL;
@@ -17,15 +18,15 @@ public class User {
 	public String htmlURL;
 	public String login;
 	public String AvatarURL;
-	public ArrayList<String> UserRepos;
+	public HashMap<String,String> UserRepos = new HashMap<String, String>();
 
 	
 	
-	public ArrayList<String> getUserRepos() {
+	public HashMap<String,String> getUserRepos() {
 		return UserRepos;
 	}
 	public void setUserRepos(String repoURL) {
-		UserRepos=UserController.listUserRepos(repoURL);
+		UserRepos=UserDetails.listUserRepos(repoURL);
 		
 		
 	}
