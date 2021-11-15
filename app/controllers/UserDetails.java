@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
@@ -21,7 +22,7 @@ import models.User;
 import play.mvc.Controller;
 import play.mvc.Result;
 
-public class UserController extends Controller{
+public class UserDetails {
 	
 	static public User userInfo=new User();
 	
@@ -77,14 +78,12 @@ public static User storeUserInfo(JSONObject user) {
 	}
 
 //Calling repo_url
-public static ArrayList<String> listUserRepos(String repourl)
+public static  HashMap<String,String> listUserRepos(String repourl)
 {
 	JSONArray JsonobjectArray = null;
 	try {
-//  		System.out.println("***"+repourl);
 		URIBuilder builder = new URIBuilder(repourl);
 		builder.addParameter("accept", "application/vnd.github.v3+json");
-//		builder.addParameter("per_page", "10");
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 
 		HttpResponse resp = null;
@@ -109,17 +108,15 @@ public static ArrayList<String> listUserRepos(String repourl)
 		e.printStackTrace();
 	}
 	
-//	System.out.println(JsonobjectArray);
-	ArrayList<String> userReposList= new ArrayList<String>();
+	HashMap<String,String> userReposList= new HashMap<String,String>();
 	
 	for(int i=0; i<JsonobjectArray.length();i++) {
-//		Repository obj = new Repository();
 		JSONObject repoOfUser = (JSONObject)JsonobjectArray.getJSONObject(i);
 		String reponame= (String)repoOfUser.getString("name");
-		userReposList.add(reponame);
+		String repoid= String.valueOf(repoOfUser.getInt("id"));
+		userReposList.put(repoid,reponame);
 		
 	}
-//   	System.out.println("------------------"+userReposList);
 	return userReposList;
 	
 }
@@ -127,12 +124,3 @@ public static ArrayList<String> listUserRepos(String repourl)
 }
 	
 	
-//	public Result collaborators(String id) {
-//    	for(Repository rd : Search.repos) {
-//    		if(id.equals(rd.id))
-//			r= rd;
-//    	}
-//    	return ok(views.html.user.render(r));	
-//    }
-	
-

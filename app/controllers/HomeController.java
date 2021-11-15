@@ -131,7 +131,7 @@ public class HomeController extends Controller {
     
     public Result userinfo(String login)
     {
-    	User userDetail=UserController.storeUserInfo(UserController.UserApiCall(login));
+    	User userDetail=UserDetails.storeUserInfo(UserDetails.UserApiCall(login));
     	return ok(views.html.user.render(userDetail));
     }
     
