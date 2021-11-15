@@ -11,10 +11,10 @@
    </head>
 <body>	
   <h1> Top 10 Committers </h1>
-  
+
  
   <div class = "result-div">
- 
+
 
 @for(c <- comm){
     <p>Name : <a href="@routes.HomeController.userinfo(c.name)"> @c.name</a> , Commits : @c.commitNum</p>

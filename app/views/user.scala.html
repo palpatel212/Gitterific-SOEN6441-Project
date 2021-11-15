@@ -23,7 +23,7 @@
  		<p> Public Repositories: @u.publicRepos </p>
  		<p> Repositories: </p>	
   		
-  		@for(t <- u.UserRepos.values()){
+  		@for(t <- u.UserRepos){
         <li><a href="#">@t</a></li>
   }
   	</div>

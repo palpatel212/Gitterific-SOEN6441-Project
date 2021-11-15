@@ -1,0 +1,21 @@
+@(mp: Map[String, Long])  
+
+<html>
+	<head>
+		<title>User Information</title>
+		<link rel="stylesheet" type="text/css" 
+                       href='@routes.Assets.versioned("stylesheets/resultsStyle.css")'>
+   
+   </head>
+   
+<body>
+	<h1> Issue Statistics </h1>
+ 	<div class= "result-div">
+ 	
+ 	@for(t <- mp.keySet()){ 
+ 		<li>@t --> @mp.get(t) </li>  
+ 		
+ 	}
+	</div>
+ </body> 
+ </html>

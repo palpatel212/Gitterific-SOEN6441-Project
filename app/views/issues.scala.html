@@ -6,6 +6,7 @@
                        href='@routes.Assets.versioned("stylesheets/resultsStyle.css")'>
    </head>
 	<body>
+	  <a href="@routes.HomeController.issueStats()"> Issue statistics </a>
 	<h1> Recent Issues of a Repository: </h1>
  	@for(i <- issueList){
  	 <div class = "result-div">

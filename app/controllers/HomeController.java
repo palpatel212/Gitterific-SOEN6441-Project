@@ -15,6 +15,8 @@ import java.util.OptionalDouble;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.stream.Collectors;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -31,6 +33,7 @@ import org.json.JSONObject;
 
 import models.Commits;
 import models.Committer;
+import models.Issues;
 import models.RepoData;
 import models.Repository;
 import models.User;
@@ -58,6 +61,7 @@ public class HomeController extends Controller {
      */
 	public List<Commits> com = new ArrayList<Commits>();
 	public List<Committer> committers = new ArrayList<Committer>();
+	List<Issues> issueList = new ArrayList<Issues>();
 	public HashMap<String, Integer> sorted;
 	public List<Integer> additionResult = new ArrayList<Integer>();
 	public List<Integer> deletionResult = new ArrayList<Integer>();
@@ -116,22 +120,15 @@ public class HomeController extends Controller {
     	}
     	
     	return CompletableFuture.supplyAsync(() -> {
-    		return RepoIssues.getIssueList(r);
+    		this.issueList = RepoIssues.getIssueList(r);
+    		return this.issueList;
     	}).thenApply(issueList -> ok(views.html.issues.render(issueList)));
-    	
-//    	RepoIssues.getIssueList(r);
-//    	return ok(views.html.issues.render(r));
-//    	return CompletableFuture.supplyAsync(() -> {
-//    		return RepoIssues.getIssueList(r);
-//    	}).thenApply(repo -> ok(views.html.index.render(repo)));
-//    	return ok(views.html.issues.render(r));
-    	
     	
     }
     
     public Result userinfo(String login)
     {
-    	User userDetail=UserDetails.storeUserInfo(UserDetails.UserApiCall(login));
+    	User userDetail=UserController.storeUserInfo(UserController.UserApiCall(login));
     	return ok(views.html.user.render(userDetail));
     }
     
@@ -212,7 +209,22 @@ public class HomeController extends Controller {
         
     	
     	return ok(views.html.commitSats.render(committers,avgAdd,avgDel,maxAdd,maxDel,minAdd,minDel));
+    }
+    
+    public Result issueStats() {
     	
+    	List<String> issueTitles = this.issueList.stream().map(i -> i.getTitle()).collect(Collectors.toList());
+    	System.out.println("This are issue titles");
+    	List<String> allWords = issueTitles.stream().flatMap(i -> Arrays.stream(i.split(" "))).collect(Collectors.toList());
+    	
+    	Map<String, Long> finalMapDescendingOrder = new LinkedHashMap<>();
+    	
+    	allWords.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting())).entrySet().stream()
+    	.sorted(Map.Entry.<String, Long>comparingByValue().reversed()).forEachOrdered(e -> finalMapDescendingOrder.put(e.getKey(), e.getValue()));
+    	
+    	System.out.println("Statistics :");
+//    	System.out.println(finalMapDescendingOrder);
+    	return ok(views.html.issueStats.render(finalMapDescendingOrder));
     }
     
 public void findcommit() {
