@@ -1,9 +1,13 @@
 package models;
 
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
 
-
+import controllers.UserController;
+import controllers.RepoDetails;
+import controllers.RepoIssues;
+import models.Issues;
 
 public class Repository {
 
@@ -24,8 +28,37 @@ public class Repository {
 	public int stars;
 	public String language;
 	public String visibility;
-	
+	public String contributorURL;
+	public List<Issues> issueList = new ArrayList<Issues>();
+	public ArrayList<String> RepoCollabs;
 	 
+	
+	
+	
+	public List<Issues> getIssueList() {
+		return issueList;
+	}
+	
+	public void setIssueList(String s) {
+	  issueList = RepoIssues.getIssueList(s);
+	}
+	
+	public String getContributorURL() {
+		return contributorURL;
+	}
+	
+	public void setContributorURL(String contributorURL) {
+		this.contributorURL = contributorURL;
+	}
+
+	public ArrayList<String> getRepoCollabs() {
+		return RepoCollabs;
+	}
+	public void setRepoCollabs(String contributorURL) {
+		RepoCollabs=RepoDetails.listCollabRepos(contributorURL);
+	}
+
+	
 	
 	public String getLanguage() {
 		return language;

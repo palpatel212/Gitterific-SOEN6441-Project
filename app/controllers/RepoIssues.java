@@ -25,8 +25,9 @@ public class RepoIssues {
 		IssueList.add(issueObj);
 	}
 	
-	public static List<Issues> getIssueList(Repository repo){
-		String issueURL = repo.getIssuesUrl();
+	public static List<Issues> getIssueList(String iss){
+		System.out.println("IN GET ISSUES ");
+		String issueURL = iss;
 		String trimmedIssueURL = "";
 		int index = issueURL.indexOf("{");
 		if(index != -1) {

@@ -5,6 +5,8 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
@@ -117,10 +119,8 @@ public static  HashMap<String,String> listUserRepos(String repourl)
 		userReposList.put(repoid,reponame);
 		
 	}
-	return userReposList;
-	
+	return userReposList;	
 }
-
 }
 	
 	

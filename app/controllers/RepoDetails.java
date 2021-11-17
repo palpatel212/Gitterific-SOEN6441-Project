@@ -22,10 +22,10 @@ import models.Repository;
 import models.User;
 import play.mvc.Controller;
 import javax.inject.Inject;
-
 import play.cache.*;
 import play.mvc.*;
 import javax.inject.Inject;
+
 
 
 public class RepoDetails {
@@ -35,15 +35,16 @@ public class RepoDetails {
 		
 		obj.setVisibility(repository.getString("visibility"));
 		obj.setForks(repository.getInt("forks"));
+		obj.setIssuesUrl(repository.getString("issues_url"));
 		obj.setWatchers_count(repository.getInt("watchers_count"));
 		obj.setScore(repository.getInt("score"));
 		obj.setStars(repository.getInt("stargazers_count"));
 		obj.setCreatedAt(repository.getString("created_at").substring(0,10));
-		
-		
-		
+		obj.setContributorURL(repository.getString("contributors_url"));
+//		obj.setRepoCollabs(repository.getString("contributors_url"));
+//		obj.setIssueList(repository.getString("issue_url"));
+
 		JSONObject owner = (JSONObject) repository.get("owner");
-		
 		obj.setLogin(owner.getString("login"));
 		obj.setRepourl(owner.getString("repos_url"));
 		obj.setRepoName(repository.getString("name"));
@@ -95,4 +96,54 @@ public class RepoDetails {
 		
 		return repos;
 	}
-}
+	
+	
+	//Calling repo_url
+	public static ArrayList<String> listCollabRepos(String contributorURL)
+	{
+		System.out.println("In List Repo Collabs Function");
+		JSONArray JsonobjectArray = null;
+		try {
+//	  		System.out.println("***"+repourl);
+			URIBuilder builder = new URIBuilder(contributorURL);
+			builder.addParameter("accept", "application/vnd.github.v3+json");
+//			builder.addParameter("per_page", "10");
+			CloseableHttpClient httpclient = HttpClients.createDefault();
+			HttpResponse resp = null;
+			HttpGet getAPI = new HttpGet(builder.build());
+			resp = httpclient.execute(getAPI);
+			
+			StatusLine statusLine = resp.getStatusLine();
+	        System.out.println(statusLine.getStatusCode() + " " + statusLine.getReasonPhrase());
+	        String responseBody = EntityUtils.toString(resp.getEntity(), StandardCharsets.UTF_8);
+	        System.out.println(responseBody.length());
+	        
+			try {
+				JsonobjectArray = new JSONArray(responseBody);
+			}catch (JSONException err){
+			     err.printStackTrace();
+			}
+			
+		} catch (URISyntaxException | IOException | RuntimeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+//		System.out.println(JsonobjectArray);
+		ArrayList<String> userCollabsList= new ArrayList<String>();
+		
+		for(int i=0; i<JsonobjectArray.length();i++) {
+//			Repository obj = new Repository();
+			JSONObject collabsOfRepo = (JSONObject)JsonobjectArray.getJSONObject(i);
+			String collabname= (String)collabsOfRepo.getString("login");
+			userCollabsList.add(collabname);
+			
+		}
+	   	System.out.println("------------------"+userCollabsList);
+		return userCollabsList;
+		}
+	}
+
+
+	
+	

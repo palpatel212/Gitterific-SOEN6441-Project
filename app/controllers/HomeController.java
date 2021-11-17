@@ -62,6 +62,7 @@ public class HomeController extends Controller {
 	public List<Commits> com = new ArrayList<Commits>();
 	public List<Committer> committers = new ArrayList<Committer>();
 	List<Issues> issueList = new ArrayList<Issues>();
+	public ArrayList<String> RepoCollabs;
 	public HashMap<String, Integer> sorted;
 	public List<Integer> additionResult = new ArrayList<Integer>();
 	public List<Integer> deletionResult = new ArrayList<Integer>();
@@ -99,6 +100,7 @@ public class HomeController extends Controller {
     	repos = repoForm.bindFromRequest(request).get();
     	String keyword= repos.getKeyword();
     	System.out.println(keyword);
+    	
     	return CompletableFuture.supplyAsync(() -> {
     		return RepoDetails.getRepoDetails(keyword);
     	}).thenApply(repo -> ok(views.html.index.render(repo)));
@@ -120,7 +122,7 @@ public class HomeController extends Controller {
     	}
     	
     	return CompletableFuture.supplyAsync(() -> {
-    		this.issueList = RepoIssues.getIssueList(r);
+    		this.issueList = RepoIssues.getIssueList(r.getIssuesUrl());
     		return this.issueList;
     	}).thenApply(issueList -> ok(views.html.issues.render(issueList)));
     	
@@ -147,14 +149,18 @@ public class HomeController extends Controller {
     
     public Result repo(String id)
     {
+    	this.issueList.clear();
     	for(Repository rd : RepoDetails.repos) {
     		if(id.equals(rd.id))
 			r= rd;
     	}
-    	
     	System.out.println("Repos ID"+id);
-    	return ok(views.html.RepoView.render(r));
+    	System.out.println(r.getContributorURL());
+    	System.out.println(r.getIssuesUrl());
+    	this.issueList = RepoIssues.getIssueList(r.getIssuesUrl());
+    	this.RepoCollabs = RepoDetails.listCollabRepos(r.getContributorURL());
     	
+    	return ok(views.html.RepoView.render(r, issueList, RepoCollabs));
     }
     
     public Result commitStats() {
