@@ -1,4 +1,4 @@
-@(r : Repository, issueList :List[Issues], RepoCollabs : List[String])
+@(r : Repository, top20issueList :List[Issues], RepoCollabs : List[String])
 
 @main("Welcome to Gitterific") {
 <style>
@@ -92,7 +92,7 @@ table, th, td {border:1px solid black;}
 
 		<div id="issues" class="tabcontent">
   			<h3>20 Latest Issues of the Repository:</h3>
-  			@for(i <- issueList){
+  			@for(i <- top20issueList){
  	 		<div class = "issue-div">
  	 			<div class= "repo-details">
  					<h1> Issue title :</h1> <p> @i.title </p>

@@ -12,10 +12,9 @@
 	<h1> Issue Statistics </h1>
  	<div class= "result-div">
  	
- 	@for(t <- mp.keySet()){ 
- 		<li>@t --> @mp.get(t) </li>  
- 		
- 	}
+ 	@for((key , value) <- mp.asScala){
+	 	<li>@key --> @value </li>
+	}
 	</div>
  </body> 
  </html>

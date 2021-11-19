@@ -44,14 +44,11 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 
-
-
-
 /**
  * This controller contains an action to handle HTTP requests
  * to the application's home page.
  */
-
+ 
 public class HomeController extends Controller {
     /**
      * An action that renders an HTML page with a welcome message.
@@ -62,6 +59,7 @@ public class HomeController extends Controller {
 	public List<Commits> com = new ArrayList<Commits>();
 	public List<Committer> committers = new ArrayList<Committer>();
 	List<Issues> issueList = new ArrayList<Issues>();
+	List<Issues> top20issueList = new ArrayList<Issues>();
 	public ArrayList<String> RepoCollabs;
 	public HashMap<String, Integer> sorted;
 	public List<Integer> additionResult = new ArrayList<Integer>();
@@ -150,6 +148,7 @@ public class HomeController extends Controller {
     public Result repo(String id)
     {
     	this.issueList.clear();
+    	this.top20issueList.clear();
     	for(Repository rd : RepoDetails.repos) {
     		if(id.equals(rd.id))
 			r= rd;
@@ -158,9 +157,23 @@ public class HomeController extends Controller {
     	System.out.println(r.getContributorURL());
     	System.out.println(r.getIssuesUrl());
     	this.issueList = RepoIssues.getIssueList(r.getIssuesUrl());
-    	this.RepoCollabs = RepoDetails.listCollabRepos(r.getContributorURL());
+    	System.out.println("SIZE" );
+    	System.out.println(this.issueList.size() );
+    	System.out.println(this.issueList);
     	
-    	return ok(views.html.RepoView.render(r, issueList, RepoCollabs));
+    	if(this.issueList.size() > 20)
+    	{
+    		for(int i = 0; i < 20; i++) {
+    			this.top20issueList.add(this.issueList.get(i));
+    		}
+    	}
+    	else
+    	{
+    		this.top20issueList = this.issueList;
+    	}
+    	System.out.println(this.top20issueList);
+    	this.RepoCollabs = RepoDetails.listCollabRepos(r.getContributorURL());
+    	return ok(views.html.RepoView.render(r, top20issueList, RepoCollabs));
     }
     
     public Result commitStats() {

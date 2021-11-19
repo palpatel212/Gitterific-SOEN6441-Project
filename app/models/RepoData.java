@@ -4,7 +4,7 @@ import play.data.validation.Constraints;
 public class RepoData {
 
 @Constraints.Required
-private String keyword;
+public String keyword;
 
 /**
 * 

@@ -21,3 +21,4 @@ libraryDependencies ++= Seq(
   cacheApi,
   jdbc
 )
+libraryDependencies += "org.mockito" % "mockito-core" % "1.10.19" % Test
