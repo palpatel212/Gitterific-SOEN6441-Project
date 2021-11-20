@@ -35,6 +35,7 @@ import models.Commits;
 import models.Committer;
 import models.Issues;
 import models.RepoData;
+import models.RepoTopics;
 import models.Repository;
 import models.User;
 import play.data.Form;
@@ -43,6 +44,9 @@ import play.i18n.MessagesApi;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
+import controllers.ApiCall;
+import controllers.RepoDetails;
+
 
 /**
  * Defines methods that renders different views
@@ -143,6 +147,7 @@ public class HomeController extends Controller {
 			r= rd;
     	}
     	
+    	
     	return CompletableFuture.supplyAsync(() -> {
     		this.issueList = RepoIssues.getIssueList(r.getIssuesUrl());
         	return this.issueList;
@@ -152,6 +157,13 @@ public class HomeController extends Controller {
     	});
     }
     
+    
+public Result topicsearch(String t) {
+    	
+    	List<Repository> r = RepoTopics.getRepoDetails(t);
+    	return ok(views.html.index.render(r));   	
+
+}
     /**
 	   * This method renders commits view
 	   * @param id RepositoryId
