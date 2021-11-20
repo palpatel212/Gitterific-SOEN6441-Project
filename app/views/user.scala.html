@@ -23,9 +23,10 @@
  		<p> Public Repositories: @u.publicRepos </p>
  		<p> Repositories: </p>	
   		
-  		@for(t <- u.UserRepos){
-        <li><a href="#">@t</a></li>
-  }
+  		@for(t <- u.userReposlist){
+  		
+        <li><a href="@routes.HomeController.userrepos(t.getRepoId)">@t.getRepoName</a></li>
+  									}
   	</div>
   
  
