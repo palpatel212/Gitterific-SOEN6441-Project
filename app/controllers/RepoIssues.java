@@ -36,6 +36,7 @@ public class RepoIssues {
 		System.out.println(trimmedIssueURL);
 		HashMap<String, String> map = new HashMap<String, String>();
 		
+		map.put("per_page", "20");
 		// Calling the API
 		ApiCall.getApiCall(trimmedIssueURL, map).thenAccept(reponseBody -> {
 			JSONArray IssueArray = new JSONArray(reponseBody);

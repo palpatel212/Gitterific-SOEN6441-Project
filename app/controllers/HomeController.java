@@ -159,7 +159,7 @@ public class HomeController extends Controller {
 	   * @return Result
 	   */
     
-    public Result repo(String id)
+    public CompletionStage<Result> repo(String id)
     {
     	this.issueList.clear();
     	this.top20issueList.clear();
@@ -167,27 +167,14 @@ public class HomeController extends Controller {
     		if(id.equals(rd.id))
 			r= rd;
     	}
-    	System.out.println("Repos ID"+id);
-    	System.out.println(r.getContributorURL());
-    	System.out.println(r.getIssuesUrl());
-    	this.issueList = RepoIssues.getIssueList(r.getIssuesUrl());
-    	System.out.println("SIZE" );
-    	System.out.println(this.issueList.size() );
-    	System.out.println(this.issueList);
     	
-    	if(this.issueList.size() > 20)
-    	{
-    		for(int i = 0; i < 20; i++) {
-    			this.top20issueList.add(this.issueList.get(i));
-    		}
-    	}
-    	else
-    	{
-    		this.top20issueList = this.issueList;
-    	}
-    	System.out.println(this.top20issueList);
-    	this.RepoCollabs = RepoDetails.listCollabRepos(r.getContributorURL());
-    	return ok(views.html.RepoView.render(r, top20issueList, RepoCollabs));
+    	return CompletableFuture.supplyAsync(() -> {
+    		this.issueList = RepoIssues.getIssueList(r.getIssuesUrl());
+        	return this.issueList;
+    	}).thenApply(issues -> {
+    		this.RepoCollabs = RepoDetails.listCollabRepos(r.getContributorURL());
+    		return ok(views.html.RepoView.render(r, issues, RepoCollabs));
+    	});
     }
     
     /**
