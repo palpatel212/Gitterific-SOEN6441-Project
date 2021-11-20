@@ -56,6 +56,7 @@ public class HomeController extends Controller {
      * this method will be called when the application receives a
      * <code>GET</code> request with a path of <code>/</code>.
      */
+	
 	public List<Commits> com = new ArrayList<Commits>();
 	public List<Committer> committers = new ArrayList<Committer>();
 	List<Issues> issueList = new ArrayList<Issues>();
@@ -102,14 +103,6 @@ public class HomeController extends Controller {
     	return CompletableFuture.supplyAsync(() -> {
     		return RepoDetails.getRepoDetails(keyword);
     	}).thenApply(repo -> ok(views.html.index.render(repo)));
-    }
-    
-    public Result collaborators(String id) {
-    	for(Repository rd : RepoDetails.repos) {
-    		if(id.equals(rd.id))
-			r= rd;
-    	}
-    	return ok(views.html.collaborators.render(r));
     }
     
     public CompletionStage<Result> issues(String id) {
@@ -230,20 +223,19 @@ public class HomeController extends Controller {
     	return ok(views.html.commitSats.render(committers,avgAdd,avgDel,maxAdd,maxDel,minAdd,minDel));
     }
     
-    public Result issueStats() {
-    	
-    	List<String> issueTitles = this.issueList.stream().map(i -> i.getTitle()).collect(Collectors.toList());
-    	System.out.println("This are issue titles");
-    	List<String> allWords = issueTitles.stream().flatMap(i -> Arrays.stream(i.split(" "))).collect(Collectors.toList());
-    	
-    	Map<String, Long> finalMapDescendingOrder = new LinkedHashMap<>();
-    	
-    	allWords.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting())).entrySet().stream()
-    	.sorted(Map.Entry.<String, Long>comparingByValue().reversed()).forEachOrdered(e -> finalMapDescendingOrder.put(e.getKey(), e.getValue()));
-    	
-    	System.out.println("Statistics :");
-//    	System.out.println(finalMapDescendingOrder);
-    	return ok(views.html.issueStats.render(finalMapDescendingOrder));
+    public CompletionStage<Result> issueStats() {
+    	return CompletableFuture.supplyAsync(() -> {
+    		List<String> issueTitles = this.issueList.stream().map(i -> i.getTitle()).collect(Collectors.toList());
+        	System.out.println("This are issue titles");
+        	List<String> allWords = issueTitles.stream().flatMap(i -> Arrays.stream(i.split(" "))).collect(Collectors.toList());
+        	
+        	Map<String, Long> finalMapDescendingOrder = new LinkedHashMap<>();
+        	
+        	allWords.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting())).entrySet().stream()
+        	.sorted(Map.Entry.<String, Long>comparingByValue().reversed()).forEachOrdered(e -> finalMapDescendingOrder.put(e.getKey(), e.getValue()));
+        	
+        	return finalMapDescendingOrder;
+    	}).thenApply(finalMapDescendingOrder -> ok(views.html.issueStats.render(finalMapDescendingOrder)));
     }
     
 public void findcommit() {

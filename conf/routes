@@ -14,6 +14,5 @@ GET    /user/:login                        controllers.HomeController.userinfo(l
 GET    /issues/:id                        controllers.HomeController.issues(id : String)
 GET    /commits/:id                        controllers.HomeController.commits(id : String)
 GET    /check/:id                       controllers.HomeController.repo(id : String)
-GET    /collaborators/:id                controllers.HomeController.collaborators(id : String)
 GET    /commitstats						controllers.HomeController.commitStats()
 GET    /issueStats						controllers.HomeController.issueStats()
