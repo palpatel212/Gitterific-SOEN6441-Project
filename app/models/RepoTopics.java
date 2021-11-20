@@ -29,8 +29,6 @@ import javax.inject.Inject;
 
 public class RepoTopics{
 	
-	
-	
 	static public List<Repository> repotopics = new ArrayList<Repository>();
 	public static void setRepoTopics(JSONObject repository) {
 		Repository obj = new Repository();
