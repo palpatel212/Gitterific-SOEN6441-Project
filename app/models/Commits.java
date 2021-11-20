@@ -4,7 +4,15 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Model class for storing commits data
+ * 
+ * @author Juhi Patel
+ * @version 1.0
+ */
+
 public class Commits {
+	
 	
 		public static Integer totalCommits;
 		public String commitName;
@@ -15,9 +23,6 @@ public class Commits {
 		public String committerName;
 		public Integer committerId;
 		public static HashMap<String,Integer> countMap = new HashMap<String, Integer>();
-		
-		
-		
 		
 		
 		public String getCommitterName() {
