@@ -23,9 +23,10 @@
   		<p class ="empty-topic"> - </p> 
   		}
   		
-  @for(t <- r.topics){
-   <li>@t</li>
+ @for(t <- r.topics){
+   <li><a href="@routes.HomeController.topicsearch(t)">@t</a></li>
   }
+  
   	</div>
   }
  
