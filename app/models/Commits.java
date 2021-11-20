@@ -24,56 +24,84 @@ public class Commits {
 		public Integer committerId;
 		public static HashMap<String,Integer> countMap = new HashMap<String, Integer>();
 		
-		
+		 
 		public String getCommitterName() {
 			return committerName;
 		}
+		
 		public void setCommitterName(String committerName) {
 			this.committerName = committerName;
 		}
+		
+		 
 		public Integer getCommitterId() {
 			return committerId;
 		}
+		
+		
 		public void setCommitterId(Integer committerId) {
 			this.committerId = committerId;
 		}
+		
+	
 		public static Integer getTotalCommits() {
 			return totalCommits;
 		}
+		
+		 
 		public static void setTotalCommits(Integer totalCommits) {
 			Commits.totalCommits = totalCommits;
 		}
+		
+		 
 		public String getTotal() {
 			return total;
 		}
+		
 		public void setTotal(String total) {
 			this.total = total;
 		}
+		
+		
 		public Integer getAddition() {
 			return addition;
 		}
+		
+		
 		public void setAddition(Integer addition) {
 			this.addition = addition;
 		}
+		
+	
 		public Integer getDeletion() {
 			return deletion;
 		}
+		
+
 		public void setDeletion(Integer deletion) {
 			this.deletion = deletion;
 		}
+		
 		public String getCommitName() {
 			return commitName;
 		}
+		
+	
 		public void setCommitName(String commitName) {
 			this.commitName = commitName;
 		}
+		
+
 		public String getCommitUrl() {
 			return commitUrl;
 		}
+		
+	
 		public void setCommitUrl(String commitUrl) {
 			this.commitUrl = commitUrl;
 		}
 		
+	
 		public void updateMap() {
 			if(!countMap.containsKey(committerName)) {
 				countMap.put(committerName, 1);
