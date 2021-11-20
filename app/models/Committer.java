@@ -1,4 +1,10 @@
 package models;
+/**
+ * Model class for storing committer data
+ * 
+ * @author Juhi Patel
+ * @version 1.0
+ */
 
 public class Committer {
 	public String name;
