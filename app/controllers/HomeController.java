@@ -129,40 +129,27 @@ public class HomeController extends Controller {
 	   * @return Result
 	   */
     public Result userinfo(String login)
-    {
+    {    	
     	User userDetail=UserDetails.storeUserInfo(UserDetails.UserApiCall(login));
     	return ok(views.html.user.render(userDetail));
     }
     
-    public Result userrepos(String id)
+    public CompletionStage<Result> userrepos(String id)
     {
-    	System.out.println("Inside userrepos**");
     	this.issueList.clear();
     	this.top20issueList.clear();
-    	Repository r=UserDetails.setUserReposDetails(UserDetails.UserReposApiCall(id));
-    	System.out.println("Repos ID"+id);
-    	this.issueList = RepoIssues.getIssueList(r.getIssuesUrl());
-    	System.out.println("SIZE" );
-    	System.out.println(this.issueList.size() );
-    	System.out.println(this.issueList);
-    	
-    	if(this.issueList.size() > 20)
-    	{
-    		for(int i = 0; i < 20; i++) {
-    			this.top20issueList.add(this.issueList.get(i));
-    		}
+    	for(Repository rd : RepoDetails.repos) {
+    		if(id.equals(rd.id))
+			r= rd;
     	}
-    	else
-    	{
-    		this.top20issueList = this.issueList;
-    	}
-    	System.out.println(this.top20issueList);
-    	this.RepoCollabs = RepoDetails.listCollabRepos(r.getContributorURL());
-    	return ok(views.html.RepoView.render(r, top20issueList, RepoCollabs));
     	
-    	
-    	//return ok(views.html.RepoView.render(r));
-    	
+    	return CompletableFuture.supplyAsync(() -> {
+    		this.issueList = RepoIssues.getIssueList(r.getIssuesUrl());
+        	return this.issueList;
+    	}).thenApply(issues -> {
+    		this.RepoCollabs = RepoDetails.listCollabRepos(r.getContributorURL());
+    		return ok(views.html.RepoView.render(r, issues, RepoCollabs));
+    	});
     }
     
     /**
@@ -170,7 +157,7 @@ public class HomeController extends Controller {
 	   * @param id RepositoryId
 	   * @return Result
 	   */
-    public Result commits(String id) {
+    public CompletionStage<Result> commits(String id) {
     	for(Repository rd : RepoDetails.repos) {
     		if(id.equals(rd.id)) {
 			r= rd;
@@ -178,9 +165,9 @@ public class HomeController extends Controller {
     		}
     	}
     	
-    	CommitDetails.findcommit(r);
-    	
-    	return ok(views.html.commits.render(CommitDetails.com));
+    	return CompletableFuture.runAsync(() -> {
+    		CommitDetails.findcommit(r);
+    	}).thenApply(c -> ok(views.html.commits.render(CommitDetails.com)));
     }
     
     /**
@@ -212,9 +199,7 @@ public class HomeController extends Controller {
 	   * @return Result
 	   */
     public Result commitStats() {
-    	
     	CommitDetails.commitStatistics();
-    	
     	return ok(views.html.commitSats.render(CommitDetails.committers,CommitDetails.avgAdd,CommitDetails.avgDel,CommitDetails.maxAdd,CommitDetails.maxDel,CommitDetails.minAdd,CommitDetails.minDel));
     }
     
