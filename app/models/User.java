@@ -2,9 +2,10 @@ package models;
 
 import java.util.ArrayList;
 import java.util.List;
+import models.UserRepos;
 
 
-import controllers.UserController;
+import controllers.UserDetails;
 /**
  * Model class for storing user data
  * 
@@ -23,17 +24,14 @@ public class User {
 	public String htmlURL;
 	public String login;
 	public String AvatarURL;
-	public ArrayList<String> UserRepos;
+    public ArrayList<UserRepos> userReposlist;
 
 	
-	
-	public ArrayList<String> getUserRepos() {
-		return UserRepos;
+	public ArrayList<UserRepos> getUserReposlist() {
+		return userReposlist;
 	}
-	public void setUserRepos(String repoURL) {
-		UserRepos=UserController.listUserRepos(repoURL);
-		
-		
+	public void setUserReposlist(String repoURL) {
+		userReposlist= UserDetails.listUserRepos(repoURL);
 	}
 	public Integer getFollowers() {
 		return followers;

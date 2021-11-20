@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
 
-import controllers.UserController;
+import controllers.UserDetails;
 import controllers.RepoDetails;
 import controllers.RepoIssues;
 import models.Issues;
