@@ -1,5 +1,12 @@
 package models;
 
+/**
+ * Model class for storing issues data
+ * 
+ * @author Parth Parekh
+ * @version 1.0
+ */
+
 public class Issues {
 	
 	public String title;
