@@ -17,7 +17,7 @@ public class Commits {
 		public static Integer totalCommits;
 		public String commitName;
 		public String commitUrl;
-		public String total;
+		public int total;
 		public Integer addition;
 		public Integer deletion;
 		public String committerName;
@@ -54,12 +54,12 @@ public class Commits {
 		}
 		
 		 
-		public String getTotal() {
+		public int getTotal() {
 			return total;
 		}
 		
-		public void setTotal(String total) {
-			this.total = total;
+		public void setTotal(int i) {
+			this.total = i;
 		}
 		
 		
