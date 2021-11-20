@@ -8,7 +8,12 @@ import controllers.UserController;
 import controllers.RepoDetails;
 import controllers.RepoIssues;
 import models.Issues;
-
+/**
+ * Model class for storing Repository data
+ * 
+ * @author Jay Patel
+ * @version 1.0
+ */
 public class Repository {
 
 //	public String authorProfile;
