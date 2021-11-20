@@ -19,9 +19,18 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
+/**
+ * This Class is used to make an API call
+ * @author Parth Parekh
+ */
 public class ApiCall {
 	
+	 /**
+	   * This method makes an API call
+	   * @param url apiurl
+	   * @param queryParameter contains query parameters to be added to the url
+	   * @return future
+	   */
 	public static CompletionStage<String> getApiCall(String url, HashMap<String, String> queryParamters) {
 		CompletableFuture<String> future = new CompletableFuture<>();
 //		JSONObject jsonObject = null;
