@@ -16,4 +16,5 @@ GET    /commits/:id                        controllers.HomeController.commits(id
 GET    /check/:id                       controllers.HomeController.repo(id : String)
 GET    /commitstats						controllers.HomeController.commitStats()
 GET    /issueStats						controllers.HomeController.issueStats()
+GET    /topicsearch/:id					controllers.HomeController.topicsearch(id : String)
 GET   /userrepos/:id                    controllers.HomeController.userrepos(id : String)
