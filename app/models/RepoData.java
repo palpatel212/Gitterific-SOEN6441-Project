@@ -1,6 +1,13 @@
 package models;
 import play.data.validation.Constraints;
 
+/**
+ * Model class for storing keyword searched 
+ * 
+ * @author Parth Parekh
+ * @version 1.0
+ */
+
 public class RepoData {
 
 @Constraints.Required
