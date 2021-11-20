@@ -5,6 +5,12 @@ import java.util.List;
 
 
 import controllers.UserController;
+/**
+ * Model class for storing user data
+ * 
+ * @author Krupali bhatt
+ * @version 1.0
+ */
 
 public class User {
 	public String repoURL;
