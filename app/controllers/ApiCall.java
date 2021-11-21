@@ -28,7 +28,7 @@ public class ApiCall {
 	/**
 	 * This method makes an API call
 	 * @param url apiurl
-	 * @param queryParameter contains query parameters to be added to the url
+	 * @param queryParamters contains query parameters to be added to the url
 	 * @return future
 	 */
 	public static CompletionStage<String> getApiCall(String url, HashMap<String, String> queryParamters) {
