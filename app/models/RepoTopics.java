@@ -138,8 +138,6 @@ public class RepoTopics{
 			e.printStackTrace();
 		}
 
-
-
 		ArrayList<String> userCollabsList= new ArrayList<String>();
 
 		for(int i=0; i<JsonobjectArray.length();i++) {
@@ -155,6 +153,5 @@ public class RepoTopics{
 	}
 
 }
-
 
 
