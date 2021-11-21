@@ -26,7 +26,7 @@ import play.mvc.Result;
 
 /**
  * This class is for working with User Details
- * @author 
+ * @author Krupali Bhatt
  *
  */
 public class UserDetails {
