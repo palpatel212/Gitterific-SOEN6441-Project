@@ -24,9 +24,9 @@ public class User {
 	public String htmlURL;
 	public String login;
 	public String AvatarURL;
-    public ArrayList<UserRepos> userReposlist;
+	public ArrayList<UserRepos> userReposlist;
 
-	
+
 	public ArrayList<UserRepos> getUserReposlist() {
 		return userReposlist;
 	}
@@ -93,7 +93,7 @@ public class User {
 	public void setFollowing(Integer following) {
 		this.following = following;
 	}
-	
-	
-	
+
+
+
 }

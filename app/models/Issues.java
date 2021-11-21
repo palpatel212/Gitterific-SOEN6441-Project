@@ -8,14 +8,14 @@ package models;
  */
 
 public class Issues {
-	
+
 	public String title;
 	public String created_at;
 	public String updated_at;
 	public int num;
 	public int id;
 	public String state;
-	
+
 	public String getCreated_at() {
 		return created_at;
 	}

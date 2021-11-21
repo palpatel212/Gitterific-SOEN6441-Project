@@ -24,41 +24,41 @@ import org.json.JSONObject;
  * @author Parth Parekh
  */
 public class ApiCall {
-	
-	 /**
-	   * This method makes an API call
-	   * @param url apiurl
-	   * @param queryParameter contains query parameters to be added to the url
-	   * @return future
-	   */
+
+	/**
+	 * This method makes an API call
+	 * @param url apiurl
+	 * @param queryParameter contains query parameters to be added to the url
+	 * @return future
+	 */
 	public static CompletionStage<String> getApiCall(String url, HashMap<String, String> queryParamters) {
 		CompletableFuture<String> future = new CompletableFuture<>();
-//		JSONObject jsonObject = null;
+		//		JSONObject jsonObject = null;
 		String responseBody = null;
-		
+
 		try {
 			URIBuilder builder = new URIBuilder(url);
 			for(Map.Entry<String, String> entry: queryParamters.entrySet()) {
 				builder.addParameter(entry.getKey(),entry.getValue());
 			}
-			
+
 			CloseableHttpClient httpclient = HttpClients.createDefault();
 			HttpResponse resp = null;
-			
+
 			HttpGet getAPI = new HttpGet(builder.build());
-    		resp = httpclient.execute(getAPI);
-    		
-    		StatusLine statusLine = resp.getStatusLine();
-            System.out.println(statusLine.getStatusCode() + " " + statusLine.getReasonPhrase());
-            responseBody = EntityUtils.toString(resp.getEntity(), StandardCharsets.UTF_8);
-            System.out.println(responseBody.length());
-            
-//            try {
-//	        	jsonObject = new JSONObject(responseBody);
-//	        } catch (JSONException err){
-//			     err.printStackTrace();
-//			}
-			
+			resp = httpclient.execute(getAPI);
+
+			StatusLine statusLine = resp.getStatusLine();
+			System.out.println(statusLine.getStatusCode() + " " + statusLine.getReasonPhrase());
+			responseBody = EntityUtils.toString(resp.getEntity(), StandardCharsets.UTF_8);
+			System.out.println(responseBody.length());
+
+			//            try {
+			//	        	jsonObject = new JSONObject(responseBody);
+			//	        } catch (JSONException err){
+			//			     err.printStackTrace();
+			//			}
+
 		} catch (URISyntaxException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -72,5 +72,5 @@ public class ApiCall {
 		future.complete(responseBody);
 		return future;
 	}
-	
+
 }

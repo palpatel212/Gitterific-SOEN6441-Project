@@ -10,7 +10,7 @@ package models;
 public class UserRepos {
 	public String repoName;
 	public String repoId;
-	
+
 	public String getRepoName() {
 		return repoName;
 	}

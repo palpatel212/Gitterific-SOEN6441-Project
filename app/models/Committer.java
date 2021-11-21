@@ -5,7 +5,6 @@ package models;
  * @author Juhi Patel
  * @version 1.0
  */
-
 public class Committer {
 	public String name;
 	public Integer commitNum;

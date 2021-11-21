@@ -16,11 +16,11 @@ import models.Issues;
  */
 public class Repository {
 
-//	public String authorProfile;
+	//	public String authorProfile;
 	public String id;
 	public String repourl;
 	public String createdAt;
-//	public String updatedAt;
+	//	public String updatedAt;
 	public String gitCommitsurl;
 	public String commitsUrl;
 	public String issuesUrl;
@@ -36,22 +36,22 @@ public class Repository {
 	public String contributorURL;
 	public List<Issues> issueList = new ArrayList<Issues>();
 	public ArrayList<String> RepoCollabs;
-	 
-	
-	
-	
+
+
+
+
 	public List<Issues> getIssueList() {
 		return issueList;
 	}
-	
+
 	public void setIssueList(String s) {
-	  issueList = RepoIssues.getIssueList(s);
+		issueList = RepoIssues.getIssueList(s);
 	}
-	
+
 	public String getContributorURL() {
 		return contributorURL;
 	}
-	
+
 	public void setContributorURL(String contributorURL) {
 		this.contributorURL = contributorURL;
 	}
@@ -63,8 +63,8 @@ public class Repository {
 		RepoCollabs=RepoDetails.listCollabRepos(contributorURL);
 	}
 
-	
-	
+
+
 	public String getLanguage() {
 		return language;
 	}
@@ -108,17 +108,17 @@ public class Repository {
 		this.visibility = visibility;
 	}
 
-	
-	
-	
-	
+
+
+
+
 	public String getId() {
 		return id;
 	}
 	public void setId(String id) {
 		this.id = id;
 	}
-	
+
 	public String getLogin() {
 		return login;
 	}
@@ -131,31 +131,31 @@ public class Repository {
 	public void setRepoName(String repoName) {
 		this.repoName = repoName;
 	}
-//	public String getAuthorProfile() {
-//		return authorProfile;
-//	}
-//	public void setAuthorProfile(String authorProfile) {
-//		this.authorProfile = authorProfile;
-//	}
+	//	public String getAuthorProfile() {
+	//		return authorProfile;
+	//	}
+	//	public void setAuthorProfile(String authorProfile) {
+	//		this.authorProfile = authorProfile;
+	//	}
 	public String getRepourl() {
 		return repourl;
 	}
 	public void setRepourl(String repourl) {
 		this.repourl = repourl;
 	}
-//	public String getCreatedAt() {
-//		return createdAt;
-//	}
-//	public void setCreatedAt(String createdAt) {
-//		
-//		this.createdAt = createdAt;
-//	}
-//	public String getUpdatedAt() {
-//		return updatedAt;
-//	}
-//	public void setUpdatedAt(String updatedAt) {
-//		this.updatedAt = updatedAt;
-//	}
+	//	public String getCreatedAt() {
+	//		return createdAt;
+	//	}
+	//	public void setCreatedAt(String createdAt) {
+	//		
+	//		this.createdAt = createdAt;
+	//	}
+	//	public String getUpdatedAt() {
+	//		return updatedAt;
+	//	}
+	//	public void setUpdatedAt(String updatedAt) {
+	//		this.updatedAt = updatedAt;
+	//	}
 	public String getGitCommitsurl() {
 		return gitCommitsurl;
 	}
@@ -174,13 +174,13 @@ public class Repository {
 	public void setIssuesUrl(String issuesUrl) {
 		this.issuesUrl = issuesUrl;
 	}
-	
+
 	public ArrayList<String> getTopics(){
 		return topics;
 	}
-	
+
 	public void setTopics(ArrayList<String> topics) {
 		this.topics = topics;
 	}
-	
+
 }
