@@ -4,6 +4,10 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+/**This class contains methods for testing User class
+ * @author Pal Patel
+ *
+ */
 public class UserTest {
 
 	

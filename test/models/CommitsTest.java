@@ -2,8 +2,11 @@ package models;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class CommitsTest{
-	
+/**This class contains methods for testing Commits class
+ * @author Pal Patel
+ *
+ */
+public class CommitsTest{ 
 	@Test
 	public void tCommitterName(){
 		Commits testCommitterName= new Commits();

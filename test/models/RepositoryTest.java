@@ -3,6 +3,10 @@ package models;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
+/**This class contains method for testing Repository class
+ * @author Pal Patel
+ *
+ */
 public class RepositoryTest{
 	
 

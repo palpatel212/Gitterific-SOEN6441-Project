@@ -28,16 +28,26 @@ import play.mvc.Result;
 import play.test.Helpers;
 import play.test.WithApplication;
 
+/**This class tests controller
+ *
+ */
 public class ControllerTest extends WithApplication {
 	
+	/**
+	 * This method creates a set up for testing
+	 * @author Parth Parekh
+	 */
 	@Before
 	public void setup() {
 	   List<Repository> repos = new ArrayList<Repository>();
 	   Repository r = new Repository();
-	   r.setId("51803340");
-	   r.setGitCommitsurl("https://api.github.com/repos/DeborahK/Angular-GettingStarted/commits{/sha}");
-	   r.setCommitsUrl("https://api.github.com/repos/DeborahK/Angular-GettingStarted/commits{/sha}");
-	   r.setIssuesUrl("https://api.github.com/repos/DeborahK/Angular-GettingStarted/issues{/number}");
+	   r.setId("189491745");
+	   r.setLogin("lyft");
+	   r.setRepoName("flinkk8soperator");
+	   r.setGitCommitsurl("https://api.github.com/repos/lyft/flinkk8soperator/commits{/sha}");
+	   r.setCommitsUrl("https://api.github.com/repos/lyft/flinkk8soperator/commits{/sha}");
+	   r.setIssuesUrl("https://api.github.com/repos/lyft/flinkk8soperator/issues{/number}");
+	   r.setContributorURL("https://api.github.com/repos/lyft/flinkk8soperator/contributors");
 	   
 	   repos.add(r);
 	   RepoDetails.repos = repos;
@@ -49,6 +59,10 @@ public class ControllerTest extends WithApplication {
 	   HomeController.issueList = issueList; 
 	}
 	
+	/**
+	 * This method tests the create controller
+	 * @author Parth Parekh
+	 */	
 	@Test
     public void testCreateController() {
         RequestBuilder request = Helpers.fakeRequest()
@@ -59,10 +73,14 @@ public class ControllerTest extends WithApplication {
         assertEquals(OK, result.status());
 	}
 	
+	/**
+	 * This method tests the form submit
+	 * @author Parth Parekh
+	 */
    @Test
     public void testFormSubmit() {
 	   Map<String, String> data = new HashMap<>();
-	   data.put("keyword", "angular");
+	   data.put("keyword", "flink");
         RequestBuilder request = Helpers.fakeRequest()
                 .method(POST).bodyForm(data).uri("/create");
 
@@ -70,15 +88,23 @@ public class ControllerTest extends WithApplication {
         assertEquals(OK, result.status());
     }
    
+   /**
+	 * This method tests the issues
+	 * @author Parth Parekh
+	 */
    @Test
    public void testIssues() {
        RequestBuilder request = Helpers.fakeRequest()
-               .method(GET).uri("/issues/51803340");
+               .method(GET).uri("/issues/189491745");
 
        Result result = route(app, request);
        assertEquals(OK, result.status());
    }
    
+   /**
+	 * This method tests the IssueStats
+	 * @author Parth Parekh
+	 */
    @Test
    public void testIssueStats() {
 	   RequestBuilder request = Helpers.fakeRequest()
@@ -89,5 +115,47 @@ public class ControllerTest extends WithApplication {
        assertEquals("text/html", result.contentType().get());
        assertEquals("utf-8", result.charset().get());
    }
+   
+   /**
+	 * This method tests the commits
+	 * @author Juhi Patel
+	 */
+   @Test
+ public void testCommits() {
+     RequestBuilder request = Helpers.fakeRequest()
+             .method(GET).uri("/commits/189491745");
 
+     Result result = route(app, request);
+     assertEquals(OK, result.status());
+ }
+  
+   /**
+	 * This method tests the commitstats
+	 * @author Juhi Patel
+	 */
+   @Test
+   public void testCommitStats() {
+	   RequestBuilder request = Helpers.fakeRequest()
+               .method(GET).uri("/commitstats");
+
+       Result result = route(app, request);
+       assertEquals(OK, result.status());
+       assertEquals("text/html", result.contentType().get());
+       assertEquals("utf-8", result.charset().get());
+   }
+   
+   /**
+	 * This method tests the user
+	 * @author Krupali Bhatt
+	 */
+   @Test
+   public void testUser() {
+       RequestBuilder request = Helpers.fakeRequest()
+               .method(GET).uri("/user/lyft");
+
+       Result result = route(app, request);
+       assertEquals(OK, result.status());
+   }
+
+  
 }
