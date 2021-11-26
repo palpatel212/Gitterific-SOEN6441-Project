@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.OptionalDouble;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -46,7 +47,9 @@ import play.mvc.Http;
 import play.mvc.Result;
 import controllers.ApiCall;
 import controllers.RepoDetails;
-
+import play.cache.*;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 
 /**
  * Defines methods that renders different views
@@ -66,6 +69,8 @@ public class HomeController extends Controller {
 		this.messagesApi = messagesApi;
 		this.formFactory = formFactory;
 	}
+	
+	public Cache<String, List<Repository>> cache = Caffeine.newBuilder().build();
 
 	public List<String> keywords;
 	
@@ -101,7 +106,14 @@ public class HomeController extends Controller {
     	System.out.println(keyword);
     	
     	return CompletableFuture.supplyAsync(() -> {
-    		return RepoDetails.getRepoDetails(keyword);
+    		List<Repository> listOfRepos;
+    		listOfRepos = cache.getIfPresent(keyword);
+    		if(listOfRepos == null) {
+    			System.out.println("Keyword not present in the cache");
+    			listOfRepos = RepoDetails.getRepoDetails(keyword);
+    			cache.put(keyword, listOfRepos);
+    		}
+    		return listOfRepos;
     	}).thenApply(repo -> ok(views.html.create.render(repoForm,request,messagesApi.preferred(request), repo)));
     }
     

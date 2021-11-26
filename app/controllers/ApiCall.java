@@ -19,6 +19,7 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import play.cache.*;
 /**
  * This Class is used to make an API call
  * @author Parth Parekh
@@ -52,13 +53,8 @@ public class ApiCall {
 			System.out.println(statusLine.getStatusCode() + " " + statusLine.getReasonPhrase());
 			responseBody = EntityUtils.toString(resp.getEntity(), StandardCharsets.UTF_8);
 			System.out.println(responseBody.length());
-
-			//            try {
-			//	        	jsonObject = new JSONObject(responseBody);
-			//	        } catch (JSONException err){
-			//			     err.printStackTrace();
-			//			}
-
+			
+			
 		} catch (URISyntaxException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

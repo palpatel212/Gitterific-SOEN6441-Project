@@ -18,7 +18,6 @@ PlayKeys.fileWatchService := play.dev.filewatch.FileWatchService.jdk7(play.sbt.r
 libraryDependencies += "org.apache.httpcomponents" % "httpclient" % "4.5.2"
 libraryDependencies += "org.json" % "json" % "20210307"
 libraryDependencies ++= Seq(
-  cacheApi,
-  jdbc
+  caffeine
 )
 libraryDependencies += "org.mockito" % "mockito-core" % "1.10.19" % Test

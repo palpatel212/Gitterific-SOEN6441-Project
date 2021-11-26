@@ -93,7 +93,6 @@ public class RepoDetails {
 
 		ApiCall.getApiCall(url, map).thenAccept(responseBody -> {
 			JSONObject json = new JSONObject(responseBody);
-			System.out.println(json.toString(4));
 			//			CompletionStage<Done> result = cache.set("item.key", json.toString());
 			repos.clear();
 			org.json.JSONArray array = json.getJSONArray("items");
