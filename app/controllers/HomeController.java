@@ -82,13 +82,12 @@ public class HomeController extends Controller {
 	   * @param request http-Request
 	   * @return Result
 	   */    
-    public CompletionStage<Result> create(Http.Request request) {
-    	
-    	return CompletableFuture.supplyAsync(() -> {
-    		repoForm = formFactory.form(RepoData.class);
-        	return repoForm;
-    	}).thenApply(repoForm -> ok(views.html.create.render(repoForm,request,messagesApi.preferred(request))));
+    public Result create(Http.Request request) {
+    	repoForm = formFactory.form(RepoData.class);
+    	System.out.println("In create");
+    	return ok(views.html.create.render(repoForm,request,messagesApi.preferred(request), null));
     }
+
     /**
 	   * This method lists repositories  
 	   * @param request http-Request
@@ -103,7 +102,7 @@ public class HomeController extends Controller {
     	
     	return CompletableFuture.supplyAsync(() -> {
     		return RepoDetails.getRepoDetails(keyword);
-    	}).thenApply(repo -> ok(views.html.index.render(repo)));
+    	}).thenApply(repo -> ok(views.html.create.render(repoForm,request,messagesApi.preferred(request), repo)));
     }
     
     /**

@@ -1,5 +1,5 @@
 
-@(repoForm : Form[RepoData])(implicit request: Http.Request, messages: play.i18n.Messages)
+@(repoForm : Form[RepoData])(implicit request: Http.Request, messages: play.i18n.Messages, repoDetails: List[Repository])
 @import helper._
 
 <html>
@@ -18,5 +18,23 @@
 			<input type="submit" value="Go">
 		}
 		
+		@if(repoDetails != null){
+			<div class = "result-div">
+			@for(r<-repoDetails){
+				<div class = "result-details">
+					<p> User: <a href="@routes.HomeController.userinfo(r.login)">@r.login</a> </p>
+					<p> Repository:	<a href="@routes.HomeController.repo(r.id)">@r.repoName</a> </p>
+					<p> Topics: </p>	
+					
+					@if(r.topics.size() == 0){
+					<p class ="empty-topic"> - </p> 
+					}
+					
+			@for(t <- r.topics){
+			<li>@t</li>
+			}
+				</div>
+			}
+		}
 	</body>
 </html>
