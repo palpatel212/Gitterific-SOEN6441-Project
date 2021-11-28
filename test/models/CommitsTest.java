@@ -56,6 +56,5 @@ public class CommitsTest{
 		Commits testCommitterName= new Commits();
 		testCommitterName.setCommitName("Committer Name");
 		assertEquals(testCommitterName.getCommitName(),"Committer Name");
-	}
-	
+	}	
 }
