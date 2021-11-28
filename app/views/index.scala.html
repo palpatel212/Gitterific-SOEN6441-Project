@@ -17,18 +17,18 @@
  	<div class = "result-details">
  		<p> User: <a href="@routes.HomeController.userinfo(r.login)">@r.login</a> </p>
         <p> Repository:	<a href="@routes.HomeController.repo(r.id)">@r.repoName</a> </p>
-  		<p> Topics: </p>	
+  		<p> Topics: </p>	 	
   		
   		@if(r.topics.size() == 0){
-  		<p class ="empty-topic"> - </p> 
+  		<p class ="empty-topic"> </p> 
   		}
   		
- @for(t <- r.topics){
-   <li><a href="@routes.HomeController.topicsearch(t)">@t</a></li>
-  }
-  
+ 		@for(t <- r.topics){
+   		<li><a href="@routes.HomeController.topicsearch(t)">@t</a></li>
+ 	}
+  	
   	</div>
-  }
+  }	
  
  </div>
  
