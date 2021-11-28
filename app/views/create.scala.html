@@ -6,6 +6,8 @@
 	<head>
 		<title>Repos</title>
 		<link rel="stylesheet" type="text/css" 
+                       href='@routes.Assets.versioned("stylesheets/resultsStyle.css")'>
+		<link rel="stylesheet" type="text/css" 
                        href='@routes.Assets.versioned("stylesheets/formStyle.css")'>
 	</head>
 	<body>
@@ -31,7 +33,7 @@
 					}
 					
 			@for(t <- r.topics){
-			<li>@t</li>
+			<li><a href="@routes.HomeController.topicsearch(t)">@t</a></li>
 			}
 				</div>
 			}
