@@ -17,6 +17,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
+
+import controllers.HomeController;
+import controllers.RepoDetails;
+
 import org.junit.Before;
 
 import models.Issues;
@@ -51,6 +55,10 @@ public class ControllerTest extends WithApplication {
 	   
 	   repos.add(r);
 	   RepoDetails.repos = repos;
+	   
+	   List<String> repoCollabs = new ArrayList<String>();
+	   repoCollabs.add("chandran");
+	   repoCollabs.add("rsheik");
 	   
 	   List<Issues> issueList = new ArrayList<Issues>();
 	   Issues i = new Issues();
@@ -156,6 +164,18 @@ public class ControllerTest extends WithApplication {
        Result result = route(app, request);
        assertEquals(OK, result.status());
    }
-
+   
+   /**
+ 	 * This method tests the Topics
+ 	 * @author Pal Patel
+ 	 */
+    @Test
+    public void testTopics() {
+   	 RequestBuilder request=Helpers.fakeRequest()
+   			 .method(GET).uri("/topicsearch/java");
+   	 Result result = route(app, request);
+        assertEquals(OK, result.status());
+   	 
+    }
   
 }

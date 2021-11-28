@@ -2,6 +2,8 @@ package models;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
+import models.Commits;
+
 /**This class contains methods for testing Commits class
  * @author Pal Patel
  *
