@@ -56,7 +56,7 @@ import com.github.benmanes.caffeine.cache.Caffeine;
  */
 public class HomeController extends Controller {
 	
-	static List<Issues> issueList = new ArrayList<Issues>();
+	public static List<Issues> issueList = new ArrayList<Issues>();
 	public ArrayList<String> RepoCollabs;
 	
 	static RepoData repos;
@@ -64,6 +64,7 @@ public class HomeController extends Controller {
 	FormFactory formFactory;
 	MessagesApi messagesApi;
 	Form<RepoData> repoForm;
+	
 	@Inject
 	public HomeController(FormFactory formFactory, MessagesApi messagesApi) {
 		this.messagesApi = messagesApi;
