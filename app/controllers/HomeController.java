@@ -39,6 +39,7 @@ import models.RepoData;
 import models.RepoTopics;
 import models.Repository;
 import models.User;
+//import models.UserRepos;
 import play.data.Form;
 import play.data.FormFactory;
 import play.i18n.MessagesApi;
@@ -58,6 +59,8 @@ public class HomeController extends Controller {
 	
 	public static List<Issues> issueList = new ArrayList<Issues>();
 	public ArrayList<String> RepoCollabs;
+	public User UserDetail;
+//	public List<UserRepos> ur;
 	
 	static RepoData repos;
 	public Repository r= new Repository();
@@ -148,14 +151,15 @@ public class HomeController extends Controller {
 //    		return userDetail;
 //    	}).thenApply(userDetail -> ok(views.html.user.render(userDetail)));
 //    	
-    	User userDetail=UserDetails.storeUserInfo(UserDetails.UserApiCall(login));
-    	return ok(views.html.user.render(userDetail));
+    	UserDetail=UserDetails.storeUserInfo(UserDetails.UserApiCall(login));
+    	return ok(views.html.user.render(UserDetail));
     }
     
     public CompletionStage<Result> userrepos(String id)
     {
+    	
     	issueList.clear();
-    	for(Repository rd : RepoDetails.repos) {
+    	for(Repository rd : UserDetail.userReposlist) {
     		if(id.equals(rd.id))
 			r= rd;
     	}

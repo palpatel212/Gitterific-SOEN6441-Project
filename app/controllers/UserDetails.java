@@ -19,7 +19,7 @@ import org.json.JSONObject;
 
 import models.Repository;
 import models.User;
-import models.UserRepos;
+//import models.UserRepos;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -67,8 +67,7 @@ public class UserDetails {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//		System.out.println(jsonObject);
-		//		System.out.println(jsonObject.getString("repos_url"));
+
 		return jsonObject;
 	}
 
@@ -100,7 +99,7 @@ public class UserDetails {
 	 * @param repourl
 	 * @return userReposlist
 	 */
-	public static  ArrayList<UserRepos> listUserRepos(String repourl)
+	public static  ArrayList<Repository> listUserRepos(String repourl)
 	{
 		JSONArray JsonobjectArray = null;
 		try {
@@ -130,17 +129,45 @@ public class UserDetails {
 			e.printStackTrace();
 		}
 
-		//	HashMap<String,String> userReposList= new HashMap<String,String>();
-		ArrayList<UserRepos> userReposlist=new ArrayList<UserRepos>();
+		ArrayList<Repository> userReposlist=new ArrayList<Repository>();
 
 		for(int i=0; i<JsonobjectArray.length();i++) {
-			JSONObject repoOfUser = (JSONObject)JsonobjectArray.getJSONObject(i);
-			UserRepos r=new UserRepos();
-			String reponame= (String)repoOfUser.getString("name");
-			r.setRepoName(reponame);
-			String repoid= String.valueOf(repoOfUser.getInt("id"));
-			r.setRepoId(repoid);
-			userReposlist.add(r);
+			JSONObject repository = (JSONObject)JsonobjectArray.getJSONObject(i);
+			Repository obj=new Repository();
+
+			obj.setVisibility(repository.getString("visibility"));
+			obj.setForks(repository.getInt("forks"));
+			obj.setIssuesUrl(repository.getString("issues_url"));
+			obj.setWatchers_count(repository.getInt("watchers_count"));
+//			obj.setScore(repository.getInt("score"));
+			obj.setStars(repository.getInt("stargazers_count"));
+			obj.setCreatedAt(repository.getString("created_at").substring(0,10));
+			obj.setContributorURL(repository.getString("contributors_url"));
+			//		obj.setRepoCollabs(repository.getString("contributors_url"));
+			//		obj.setIssueList(repository.getString("issue_url"));
+
+			JSONObject owner = (JSONObject) repository.get("owner");
+			obj.setLogin(owner.getString("login"));
+			obj.setRepourl(owner.getString("repos_url"));
+			obj.setRepoName(repository.getString("name"));
+
+			Number id= repository.getNumber("id");
+			String idtemp=id.toString();
+			System.out.println("ID String"+idtemp);
+			obj.setId(idtemp);
+			obj.setGitCommitsurl(repository.getString("git_commits_url"));
+			obj.setCommitsUrl(repository.getString("commits_url"));
+			obj.setIssuesUrl(repository.getString("issues_url"));
+
+			JSONArray arr = repository.getJSONArray("topics");
+			ArrayList<String> topics = new ArrayList<String>();
+			for(int m = 0;m< arr.length();m++) {
+				topics.add(arr.getString(m));
+			}
+
+			obj.setTopics(topics);
+
+			userReposlist.add(obj);
 
 		}
 		return userReposlist;
@@ -148,89 +175,5 @@ public class UserDetails {
 	}
 
 
-	/**
-	 * This method sets User Repo details
-	 * @param repository
-	 * @return obj
-	 */
-	public static Repository setUserReposDetails(JSONObject repository) {
-		//	System.out.println("Setting user repository details**");
-		Repository obj = new Repository();
-
-		obj.setVisibility(repository.getString("visibility"));
-		obj.setForks(repository.getInt("forks"));
-		obj.setIssuesUrl(repository.getString("issues_url"));
-		obj.setWatchers_count(repository.getInt("watchers_count"));
-		//	obj.setScore(repository.getInt("score"));
-		obj.setStars(repository.getInt("stargazers_count"));
-		obj.setCreatedAt(repository.getString("created_at").substring(0,10));
-		obj.setContributorURL(repository.getString("contributors_url"));
-		//	obj.setRepoCollabs(repository.getString("contributors_url"));
-		//	obj.setIssueList(repository.getString("issue_url"));
-
-		JSONObject owner = (JSONObject) repository.get("owner");
-		obj.setLogin(owner.getString("login"));
-		obj.setRepourl(owner.getString("repos_url"));
-		obj.setRepoName(repository.getString("name"));
-
-		Number id= repository.getNumber("id");
-		String idtemp=id.toString();
-		System.out.println("ID String"+idtemp);
-		obj.setId(idtemp);
-		obj.setGitCommitsurl(repository.getString("git_commits_url"));
-		obj.setCommitsUrl(repository.getString("commits_url"));
-		obj.setIssuesUrl(repository.getString("issues_url"));
-
-		JSONArray arr = repository.getJSONArray("topics");
-		ArrayList<String> topics = new ArrayList<String>();
-		for(int i = 0;i< arr.length();i++) {
-			topics.add(arr.getString(i));
-		}
-
-		obj.setTopics(topics);
-
-		return obj;
-
-	}
-
-	/**
-	 * This method is an API call
-	 * @param id
-	 * @return jsonObject
-	 */
-	public static JSONObject UserReposApiCall(String id) {
-		//	System.out.println("Setting user repository details**");
-		System.out.println("Inside UserRepo API");
-		JSONObject jsonObject = null;
-		try {
-			URIBuilder builder = new URIBuilder("https://api.github.com/repositories/"+id);
-			builder.addParameter("accept", "application/vnd.github.v3+json");
-			CloseableHttpClient httpclient = HttpClients.createDefault();
-
-			HttpResponse resp = null;
-
-
-			HttpGet getAPI = new HttpGet(builder.build());
-			resp = httpclient.execute(getAPI);
-
-			StatusLine statusLine = resp.getStatusLine();
-			System.out.println(statusLine.getStatusCode() + " " + statusLine.getReasonPhrase());
-			String responseBody = EntityUtils.toString(resp.getEntity(), StandardCharsets.UTF_8);
-			System.out.println(responseBody.length());
-
-			try {
-				jsonObject = new JSONObject(responseBody);
-			}catch (JSONException err){
-				err.printStackTrace();
-			}
-
-		} catch (URISyntaxException | IOException | RuntimeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println(jsonObject);
-
-		return jsonObject;
-	}
-
+	
 }

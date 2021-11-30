@@ -25,7 +25,7 @@
   		
   		@for(t <- u.userReposlist){
   		
-        <li><a href="@routes.HomeController.userrepos(t.getRepoId)">@t.getRepoName</a></li>
+        <li><a href="@routes.HomeController.userrepos(t.getId)">@t.getRepoName</a></li>
   									}
   	</div>
   
