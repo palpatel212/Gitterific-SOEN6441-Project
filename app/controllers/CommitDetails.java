@@ -53,12 +53,9 @@ public class CommitDetails {
 	 */
 	public static void findcommit(Repository r) {
 
-		System.out.println("In find commit");
-
 		JSONArray jsonObject = null;
 
 		try {
-			System.out.println("In URL Builder");
 			URIBuilder builder = new URIBuilder("https://api.github.com/repos/"+r.login+"/"+r.repoName+"/commits");
 			builder.addParameter("accept", "application/vnd.github.v3+json");
 			builder.addParameter("X-RateLimit-Reset", "1350085394");
@@ -67,8 +64,6 @@ public class CommitDetails {
 			CloseableHttpClient httpclient = HttpClients.createDefault();
 
 			HttpResponse resp = null;
-
-
 
 			HttpGet getAPI = new HttpGet(builder.build());
 			resp = httpclient.execute(getAPI);
@@ -93,15 +88,13 @@ public class CommitDetails {
 
 		com.clear();
 		committers.clear();
-		System.out.println("JSON value"+jsonObject);
-		System.out.println("In find commit function");
+
 		for(int i=0; i<jsonObject.length(); i++) {
 			Commits obj = new Commits();
-			System.out.println("Commit object created");
+
 			if(!JSONObject.NULL.equals(jsonObject.getJSONObject(i))) {
 				String commitUrl= jsonObject.getJSONObject(i).getString("url");
 				obj.setCommitUrl(commitUrl);
-				System.out.println("url object created");
 				JSONObject temptCommitter = (JSONObject)jsonObject.getJSONObject(i).get("author");
 				String committerName= (String)temptCommitter.getString("login");
 				obj.setCommitterName(committerName);
@@ -156,7 +149,6 @@ public class CommitDetails {
 
 		for(Commits c:CommitDetails.com) {
 			JSONObject results = addDelStats(c.commitUrl);
-			System.out.println("Result object created.");
 			JSONObject temptStats = (JSONObject)results.get("stats");
 			if(!JSONObject.NULL.equals(temptStats)) {
 				System.out.println("In stats object");
