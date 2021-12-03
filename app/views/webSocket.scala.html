@@ -1,0 +1,14 @@
+@(url:String)
+
+<html>
+	<head>
+		<title>Repos</title>
+		<script id="helper" type='text/javascript' src='@routes.Assets.versioned("javascripts/index.js")'></script>
+	</head>
+	<body>
+		<div class="center">
+	  	<input id="searchTerm" class="input-lg" type="text" placeholder="enter search term(s)" /> 
+		<button id="goButton" type="button" class="btn btn-info" onclick="search()">Go</button>
+		</div>
+	</body>
+</html>

@@ -1,5 +1,5 @@
 
-@(repoForm : Form[RepoData])(implicit request: Http.Request, messages: play.i18n.Messages, repoDetails: List[Repository])
+@(repoForm : Form[RepoData])(implicit request: Http.Request, messages: play.i18n.Messages, repoDetails: List[Repository], url: String)
 @import helper._
 
 <html>
@@ -9,6 +9,7 @@
                        href='@routes.Assets.versioned("stylesheets/resultsStyle.css")'>
 		<link rel="stylesheet" type="text/css" 
                        href='@routes.Assets.versioned("stylesheets/formStyle.css")'>
+        <script id="helper" type='text/javascript' ws-url=@url src='@routes.Assets.versioned("javascripts/index.js")'></script>
 	</head>
 	<body>
 	

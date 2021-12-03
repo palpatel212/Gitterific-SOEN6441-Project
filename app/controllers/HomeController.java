@@ -45,11 +45,18 @@ import play.i18n.MessagesApi;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
+import play.mvc.WebSocket;
 import controllers.ApiCall;
 import controllers.RepoDetails;
 import play.cache.*;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+
+import actors.TimeActor;
+import actors.UserActor;
+import play.libs.streams.ActorFlow;
+import akka.actor.*;
+import akka.stream.*;
 
 /**
  * Defines methods that renders different views
@@ -65,10 +72,17 @@ public class HomeController extends Controller {
 	MessagesApi messagesApi;
 	Form<RepoData> repoForm;
 	
+	private final ActorSystem actorSystem;
+	private final Materializer materializer;
+	
 	@Inject
-	public HomeController(FormFactory formFactory, MessagesApi messagesApi) {
+	public HomeController(FormFactory formFactory, MessagesApi messagesApi, ActorSystem actorSystem, Materializer materializer) {
 		this.messagesApi = messagesApi;
 		this.formFactory = formFactory;
+		this.actorSystem = actorSystem;
+		this.materializer = materializer;
+		
+		actorSystem.actorOf(TimeActor.props(), "timeActor");
 	}
 	
 	public Cache<String, List<Repository>> cache = Caffeine.newBuilder().build();
@@ -82,16 +96,21 @@ public class HomeController extends Controller {
 	public Result index() {
         return ok("Hello world");
     }
-    
+	
+    public WebSocket socket() {
+	   return WebSocket.Json.accept(
+	       request -> ActorFlow.actorRef(UserActor::props, actorSystem, materializer));
+	}
+
     /**
 	   * This method renders search Repo view
 	   * @param request http-Request
 	   * @return Result
-	   */    
+	   */
     public Result create(Http.Request request) {
     	repoForm = formFactory.form(RepoData.class);
     	System.out.println("In create");
-    	return ok(views.html.create.render(repoForm,request,messagesApi.preferred(request), null));
+    	return ok(views.html.create.render(repoForm,request,messagesApi.preferred(request), null, null));
     }
 
     /**
@@ -99,12 +118,20 @@ public class HomeController extends Controller {
 	   * @param request http-Request
 	   * @return Result
 	   */
+    
+    public Result onSearch(Http.Request request) {
+    	String url = routes.HomeController.socket()
+    		      .webSocketURL(request);
+    	return ok(views.html.webSocket.render(url));
+    }
+    
     public CompletionStage<Result> save(Http.Request request) {
     	
     	Form<RepoData> repoForm = formFactory.form(RepoData.class);
     	repos = repoForm.bindFromRequest(request).get();
     	String keyword= repos.getKeyword();
-    	System.out.println(keyword);
+    	String url = routes.HomeController.socket()
+  		      .webSocketURL(request);
     	
     	return CompletableFuture.supplyAsync(() -> {
     		List<Repository> listOfRepos;
@@ -115,7 +142,7 @@ public class HomeController extends Controller {
     			cache.put(keyword, listOfRepos);
     		}
     		return listOfRepos;
-    	}).thenApply(repo -> ok(views.html.create.render(repoForm,request,messagesApi.preferred(request), repo)));
+    	}).thenApply(repo -> ok(views.html.create.render(repoForm,request,messagesApi.preferred(request), repo, url)));
     }
     
     /**
