@@ -1,8 +1,8 @@
 package models;
 
 import java.util.ArrayList;
-import java.util.List;
-import models.UserRepos;
+//import java.util.List;
+//import models.UserRepos;
 
 
 import controllers.UserDetails;
@@ -24,10 +24,10 @@ public class User {
 	public String htmlURL;
 	public String login;
 	public String AvatarURL;
-	public ArrayList<UserRepos> userReposlist;
+	public ArrayList<Repository> userReposlist;
 
 
-	public ArrayList<UserRepos> getUserReposlist() {
+	public ArrayList<Repository> getUserReposlist() {
 		return userReposlist;
 	}
 	public void setUserReposlist(String repoURL) {
