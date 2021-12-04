@@ -6,7 +6,6 @@ function search() {
 	};
 	let msg = JSON.stringify(message);	
 	searchSocket.onopen = function(){
-		alert("started");
 		searchSocket.send(msg);
 	}
 	searchSocket.onmessage = function(event) {
