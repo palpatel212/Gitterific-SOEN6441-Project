@@ -37,6 +37,6 @@ function search() {
 		}
 		
 		div.prepend(child_div)
-		alert(response);
+
 	}
 }
