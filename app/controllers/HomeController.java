@@ -55,6 +55,7 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 
 import actors.TimeActor;
 import actors.KeywordSearchActor;
+import actors.SupervisorActor;
 import play.libs.streams.ActorFlow;
 import akka.actor.*;
 import akka.stream.*;
@@ -86,6 +87,8 @@ public class HomeController extends Controller {
 		this.materializer = materializer;
 		
 		actorSystem.actorOf(TimeActor.props(), "timeActor");
+		Props superprops = Props.create(SupervisorActor.class);
+		ActorRef supervisor = actorSystem.actorOf(superprops, "supervisor");
 	}
 	
 	public Cache<String, List<Repository>> cache = Caffeine.newBuilder().build();
