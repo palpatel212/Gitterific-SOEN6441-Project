@@ -54,7 +54,7 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 
 import actors.TimeActor;
-import actors.UserActor;
+import actors.KeywordSearchActor;
 import play.libs.streams.ActorFlow;
 import akka.actor.*;
 import akka.stream.*;
@@ -102,7 +102,7 @@ public class HomeController extends Controller {
 	
     public WebSocket socket() {
 	   return WebSocket.Json.accept(
-	       request -> ActorFlow.actorRef(UserActor::props, actorSystem, materializer));
+	       request -> ActorFlow.actorRef(KeywordSearchActor::props, actorSystem, materializer));
 	}
 
     /**

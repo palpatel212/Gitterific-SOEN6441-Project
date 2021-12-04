@@ -15,11 +15,11 @@ import java.util.Map;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class UserActor extends AbstractActor{
+public class KeywordSearchActor extends AbstractActor{
 
 	private final ActorRef webSocket;
 	
-	public UserActor(ActorRef ws) {
+	public KeywordSearchActor(ActorRef ws) {
 		this.webSocket = ws;
 	}
 	
@@ -38,7 +38,7 @@ public class UserActor extends AbstractActor{
     }
     
     public static Props props(ActorRef webSocket) {
-        return Props.create(UserActor.class, webSocket);
+        return Props.create(KeywordSearchActor.class, webSocket);
     }
     
 	@Override
