@@ -1,13 +1,15 @@
+var input = document.getElementById("searchTerm");
+
+let searchSocket = new WebSocket("ws://localhost:9000/socket");
+
 function search() {
-	let searchSocket = new WebSocket("ws://localhost:9000/socket");
+	
 	var searchKey = document.getElementById("searchTerm").value;
 	let message = {
 		"keyword": searchKey
 	};
 	let msg = JSON.stringify(message);	
-	searchSocket.onopen = function(){
-		searchSocket.send(msg);
-	}
+	searchSocket.send(msg);
 	searchSocket.onmessage = function(event) {
 		var response = event.data;
 		const Res = JSON.parse(response);
@@ -17,9 +19,7 @@ function search() {
 		var child_div = document.createElement('div');
 		console.log(Res.data.length);
 		
-	
-		
-		for(let i=0; i<Res.data.length; i++)
+	for(let i=0; i<Res.data.length; i++)
 		{
 			var inner = "<div>"
 			inner += "<div>"
@@ -35,7 +35,7 @@ function search() {
 			inner += " </div> </div>"
 			child_div.innerHTML += inner;
 		}
-		
+
 		div.prepend(child_div)
 
 	}

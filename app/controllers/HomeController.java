@@ -125,6 +125,7 @@ public class HomeController extends Controller {
     public Result onSearch(Http.Request request) {
     	String url = routes.HomeController.socket()
     		      .webSocketURL(request);
+    	System.out.println(url);
     	return ok(views.html.webSocket.render(url));
     }
     
