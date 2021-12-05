@@ -199,8 +199,8 @@ public class HomeController extends Controller {
 //    }
 public CompletionStage<Result> userinfo(String login) {
 		
-    	
-    	userActor = actorSystem.actorOf(UserActor.props(login),"userActor");
+   //Insert a condition to check if actor already exists.If it does destroy it.
+    	userActor = actorSystem.actorOf(UserActor.props(login));
     	System.out.println("Inside commit hc user");
     	return FutureConverters.toJava(ask(userActor,login,1000000))
     			.thenApply(reponse -> ok(views.html.user.render(UserDetails.userInfo)));
