@@ -59,11 +59,15 @@ import actors.UserActor;
 import actors.CommitActor;
 import actors.KeywordSearchActor;
 import actors.SupervisorActor;
+import actors.issueActor;
+import actors.issueStatsActor;
 import play.libs.streams.ActorFlow;
 import akka.actor.*;
 import akka.stream.*;
-import akka.actor.ActorRef;
+import static akka.pattern.Patterns.ask;
+import java.time.Duration;
 
+import scala.compat.java8.FutureConverters;
 
 /**
  * Defines methods that renders different views
@@ -73,7 +77,6 @@ public class HomeController extends Controller {
 	public static List<Issues> issueList = new ArrayList<Issues>();
 	public ArrayList<String> RepoCollabs;
 	public User UserDetail;
-//	public List<UserRepos> ur;
 	
 	static RepoData repos;
 	public Repository r= new Repository();
@@ -273,12 +276,13 @@ public CompletionStage<Result> userinfo(String login) {
 			r= rd;
     	}
     	
-    	return CompletableFuture.supplyAsync(() -> {
-    		issueList = RepoIssues.getIssueList(r.getIssuesUrl());
-        	return issueList;
-    	}).thenApply(issues -> {
+    	ActorRef issueActorRef = actorSystem.actorOf(issueActor.props());
+    	CompletableFuture<Object> fut = ask(issueActorRef, r, Duration.ofSeconds(5)).toCompletableFuture();
+    	
+    	return fut.thenApply(issues -> {
+    		issueList = (List<Issues>) issues;
     		this.RepoCollabs = RepoDetails.listCollabRepos(r.getContributorURL());
-    		return ok(views.html.RepoView.render(r, issues, RepoCollabs));
+    		return ok(views.html.RepoView.render(r, (List<Issues>) issues, RepoCollabs));
     	});
     }
     
@@ -296,17 +300,14 @@ public CompletionStage<Result> userinfo(String login) {
 	   * @return Result
 	   */
     public CompletionStage<Result> issueStats() {
-    	return CompletableFuture.supplyAsync(() -> {
-    		List<String> issueTitles = issueList.stream().map(i -> i.getTitle()).collect(Collectors.toList());
-        	System.out.println("This are issue titles");
-        	List<String> allWords = issueTitles.stream().flatMap(i -> Arrays.stream(i.split(" "))).collect(Collectors.toList());
-        	
-        	Map<String, Long> finalMapDescendingOrder = new LinkedHashMap<>();
-        	
-        	allWords.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting())).entrySet().stream()
-        	.sorted(Map.Entry.<String, Long>comparingByValue().reversed()).forEachOrdered(e -> finalMapDescendingOrder.put(e.getKey(), e.getValue()));
-        	
-        	return finalMapDescendingOrder;
-    	}).thenApply(finalMapDescendingOrder -> ok(views.html.issueStats.render(finalMapDescendingOrder)));
+    	
+    	ActorRef issueStatsActorRef = actorSystem.actorOf(issueStatsActor.props());
+    	System.out.println(issueList);
+    	CompletableFuture<Object> fut = ask(issueStatsActorRef, issueList, Duration.ofSeconds(5)).toCompletableFuture();
+    	
+    	return fut.thenApply(finalMapDescendingOrder -> {
+    		System.out.println((Map<String, Long>)finalMapDescendingOrder);
+    		return ok(views.html.issueStats.render((Map<String, Long>)finalMapDescendingOrder));
+    	});
     }
 }
