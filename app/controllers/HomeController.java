@@ -256,7 +256,7 @@ public CompletionStage<Result> userinfo(String login) {
     		System.out.println("found repo");
     		}
     	}	
-    	commitActor = actorSystem.actorOf(CommitActor.props(r),"commitActor");
+    	commitActor = actorSystem.actorOf(CommitActor.props(r));
     	System.out.println("Inside commit hc");
     	return FutureConverters.toJava(ask(commitActor,r,1000000))
     			.thenApply(reponse -> ok(views.html.commits.render(CommitDetails.com)));
