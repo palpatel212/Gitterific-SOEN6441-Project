@@ -55,6 +55,7 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import static akka.pattern.Patterns.ask;
 import actors.TimeActor;
+import actors.UserActor;
 import actors.CommitActor;
 import actors.KeywordSearchActor;
 import actors.SupervisorActor;
@@ -83,6 +84,7 @@ public class HomeController extends Controller {
 	public static ActorSystem actorSystem;
 	private final Materializer materializer;
 	public ActorRef commitActor;
+	public ActorRef userActor;
 	
 	@Inject
 	public HomeController(FormFactory formFactory, MessagesApi messagesApi, ActorSystem actorSystem, Materializer materializer) {
@@ -181,22 +183,31 @@ public class HomeController extends Controller {
 	   * @param login Userlogin
 	   * @return Result
 	   */
-    public Result userinfo(String login)
-    {
+//    public CompletionStage<Result> userinfo(String login)
+//    {
 //    	return CompletableFuture.supplyAsync(() -> {
-//    		User userDetail=UserDetails.storeUserInfo(UserDetails.UserApiCall(login));
-//    		return userDetail;
-//    	}).thenApply(userDetail -> ok(views.html.user.render(userDetail)));
+//    		UserDetail=UserDetails.storeUserInfo(UserDetails.UserApiCall(login));
+//    		return UserDetail;
+//
+//    	}).thenApply(UserDetail -> ok(views.html.user.render(UserDetail)));
 //    	
-    	UserDetail=UserDetails.storeUserInfo(UserDetails.UserApiCall(login));
-    	return ok(views.html.user.render(UserDetail));
-    }
+////    	UserDetail=UserDetails.storeUserInfo(UserDetails.UserApiCall(login));
+////    	return ok(views.html.user.render(UserDetail));
+//    }
+public CompletionStage<Result> userinfo(String login) {
+		
+    	
+    	userActor = actorSystem.actorOf(UserActor.props(login),"userActor");
+    	System.out.println("Inside commit hc user");
+    	return FutureConverters.toJava(ask(userActor,login,1000000))
+    			.thenApply(reponse -> ok(views.html.user.render(UserDetails.userInfo)));
+    	}
     
     public CompletionStage<Result> userrepos(String id)
     {
     	
     	issueList.clear();
-    	for(Repository rd : UserDetail.userReposlist) {
+    	for(Repository rd : UserDetails.userInfo.userReposlist) {
     		if(id.equals(rd.id))
 			r= rd;
     	}
@@ -209,6 +220,8 @@ public class HomeController extends Controller {
     		return ok(views.html.RepoView.render(r, issues, RepoCollabs));
     	});
     }
+    
+    
     
     
 	public Result topicsearch(String t) {
