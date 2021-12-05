@@ -18,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import scala.compat.java8.FutureConverters;
 
 import javax.inject.Inject;
 
@@ -52,13 +53,16 @@ import controllers.RepoDetails;
 import play.cache.*;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-
+import static akka.pattern.Patterns.ask;
 import actors.TimeActor;
+import actors.CommitActor;
 import actors.KeywordSearchActor;
 import actors.SupervisorActor;
 import play.libs.streams.ActorFlow;
 import akka.actor.*;
 import akka.stream.*;
+import akka.actor.ActorRef;
+
 
 /**
  * Defines methods that renders different views
@@ -76,8 +80,9 @@ public class HomeController extends Controller {
 	MessagesApi messagesApi;
 	Form<RepoData> repoForm;
 	
-	private final ActorSystem actorSystem;
+	public static ActorSystem actorSystem;
 	private final Materializer materializer;
+	public ActorRef commitActor;
 	
 	@Inject
 	public HomeController(FormFactory formFactory, MessagesApi messagesApi, ActorSystem actorSystem, Materializer materializer) {
@@ -89,6 +94,7 @@ public class HomeController extends Controller {
 		actorSystem.actorOf(TimeActor.props(), "timeActor");
 		Props superprops = Props.create(SupervisorActor.class);
 		ActorRef supervisor = actorSystem.actorOf(superprops, "supervisor");
+		
 	}
 	
 	public Cache<String, List<Repository>> cache = Caffeine.newBuilder().build();
@@ -214,18 +220,31 @@ public class HomeController extends Controller {
 	   * @param id RepositoryId
 	   * @return Result
 	   */
-    public CompletionStage<Result> commits(String id) {
+//    public CompletionStage<Result> commits(String id) {
+//    	for(Repository rd : RepoDetails.repos) {
+//    		if(id.equals(rd.id)) {
+//			r= rd;
+//    		System.out.println("found repo");
+//    		}
+//    	}
+//    	
+//    	return CompletableFuture.runAsync(() -> {
+//    		CommitDetails.findcommit(r);
+//    	}).thenApply(c -> ok(views.html.commits.render(CommitDetails.com)));
+//    }
+	public CompletionStage<Result> commits(String id) {
+		
     	for(Repository rd : RepoDetails.repos) {
     		if(id.equals(rd.id)) {
 			r= rd;
     		System.out.println("found repo");
     		}
+    	}	
+    	commitActor = actorSystem.actorOf(CommitActor.props(r),"commitActor");
+    	System.out.println("Inside commit hc");
+    	return FutureConverters.toJava(ask(commitActor,r,1000000))
+    			.thenApply(reponse -> ok(views.html.commits.render(CommitDetails.com)));
     	}
-    	
-    	return CompletableFuture.runAsync(() -> {
-    		CommitDetails.findcommit(r);
-    	}).thenApply(c -> ok(views.html.commits.render(CommitDetails.com)));
-    }
     
     /**
 	   * This method renders repo view
@@ -277,4 +296,4 @@ public class HomeController extends Controller {
         	return finalMapDescendingOrder;
     	}).thenApply(finalMapDescendingOrder -> ok(views.html.issueStats.render(finalMapDescendingOrder)));
     }
-} 
+}
