@@ -51,7 +51,7 @@ public class CommitDetails {
 	 * 
 	 * @param r Repository
 	 */
-	public static void findcommit(Repository r) {
+	public static String findcommit(Repository r) {
 
 		JSONArray jsonObject = null;
 
@@ -122,7 +122,12 @@ public class CommitDetails {
 
 
 		sorted = temp.entrySet() .stream() .sorted(Collections.reverseOrder(Map.Entry.comparingByValue())) .collect( Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2, LinkedHashMap::new));
-
+		for (Commits c : com) {
+			System.out.println(c.getCommitName());
+		}
+		
+		return "ok";
+		
 	}
 
 	/**
@@ -217,5 +222,3 @@ public class CommitDetails {
 		return jsonObject;
 	}
 }
-
-
