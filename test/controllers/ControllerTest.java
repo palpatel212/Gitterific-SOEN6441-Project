@@ -44,6 +44,7 @@ import akka.testkit.javadsl.TestKit;
 import actors.issueStatsActor;
 import actors.issueActor;
 import actors.UserActor;
+import actors.CommitActor;
 
 /**This class tests controller
  *
@@ -96,22 +97,7 @@ public class ControllerTest extends WithApplication {
         Result result = route(app, request);
         assertEquals(OK, result.status());
 	}
-	
-//	/**
-//	 * This method tests the form submit
-//	 * @author Parth Parekh
-//	 */
-//   @Test
-//    public void testFormSubmit() {
-//	   Map<String, String> data = new HashMap<>();
-//	   data.put("keyword", "flink");
-//        RequestBuilder request = Helpers.fakeRequest()
-//                .method(POST).bodyForm(data).uri("/create");
-//
-//        Result result = route(app, request);
-//        assertEquals(OK, result.status());
-//    }
-   
+	   
    /**
 	 * This method tests the issues
 	 * @author Parth Parekh
@@ -249,8 +235,24 @@ public class ControllerTest extends WithApplication {
     	
        
        userActorRef.tell(login, ActorRef.noSender());
-       //testProbe.expectMsg(String.class);
     }
+    
+    @Test
+    public void testCommit() {
+    	Repository r = new Repository();
+  	   r.setId("189491745");
+  	   r.setCommitsUrl("https://api.github.com/repos/lyft/flinkk8soperator/commits{/sha}");
+
+  		
+    	final TestKit testProbe = new TestKit(system);
+    	final ActorRef commitActorRef = system
+				.actorOf(CommitActor.props(r));
+    	
+       
+       commitActorRef.tell(r, ActorRef.noSender());
+      
+    }
+    
   
 }
 
