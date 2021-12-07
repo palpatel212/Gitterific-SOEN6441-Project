@@ -11,8 +11,7 @@ import scala.concurrent.duration.Duration;
 
 /**
  * This actor class notifies every registered actor to push new data in fixed interval of time period.
- * @author HGG02
- * @version 1.0.0
+ * @author KP_G03
  */
 public class TimeActor extends AbstractActorWithTimers {
     

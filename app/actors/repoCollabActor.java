@@ -11,6 +11,10 @@ import controllers.RepoIssues;
 import models.Issues;
 import models.Repository;
 
+/**
+ * This actor class manages Repository Collabs
+ * @author Jay Patel
+ */
 public class repoCollabActor extends AbstractActor{
 
 	public static Props props() {

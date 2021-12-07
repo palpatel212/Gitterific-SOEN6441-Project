@@ -16,6 +16,10 @@ import java.util.Map;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+/**
+ * This actor class manages the search keyword functionality
+ * @author KPG03
+ */
 public class KeywordSearchActor extends AbstractActor{
 
 	private final ActorRef webSocket;
@@ -45,7 +49,6 @@ public class KeywordSearchActor extends AbstractActor{
     
 	@Override
 	public Receive createReceive() {
-		// TODO Auto-generated method stub
 		return receiveBuilder()
    			 .match(ObjectNode.class, searchObject -> sendNewData(searchObject.get("keyword").textValue()))
 			 .build();
