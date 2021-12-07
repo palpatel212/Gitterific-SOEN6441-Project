@@ -37,6 +37,7 @@ public class RepoTopics{
 	static public List<Repository> repotopics = new ArrayList<Repository>();
 	public static void setRepoTopics(JSONObject repository) {
 		Repository obj = new Repository();
+		
 		try {
 			obj.setVisibility(repository.getString("visibility"));
 			obj.setForks(repository.getInt("forks"));
