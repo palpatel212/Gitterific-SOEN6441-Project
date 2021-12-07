@@ -43,6 +43,7 @@ import actors.repoCollabActor;
 import actors.issueActor;
 import actors.UserActor;
 import actors.CommitActor;
+import actors.TopicsActor;
 
 /**This class tests controller
  *
@@ -164,19 +165,6 @@ public class ControllerTest extends WithApplication {
        Result result = route(app, request);
        assertEquals(OK, result.status());
    }
-   
-   /**
- 	 * This method tests the Topics
- 	 * @author Pal Patel
- 	 */
-    @Test
-    public void testTopics() {
-   	 RequestBuilder request=Helpers.fakeRequest()
-   			 .method(GET).uri("/topicsearch/java");
-   	 Result result = route(app, request);
-        assertEquals(OK, result.status());
-   	 
-    }
     
     @Test
     public void testSearch() {
@@ -266,6 +254,22 @@ public class ControllerTest extends WithApplication {
       
     }
     
+
+    /**
+  	 * This method tests the Topics
+  	 * @author Pal Patel
+  	 */   
+    @Test
+    public void testTopics() {
+    	
+    	String tword="java";
+    	final TestKit testProbe = new TestKit(system);
+    	final ActorRef topicsearchActor = system
+    			.actorOf(TopicsActor.props(tword));
+    	
+    	topicsearchActor.tell(tword, ActorRef.noSender());
+    }
+       
+    
   
 }
-
