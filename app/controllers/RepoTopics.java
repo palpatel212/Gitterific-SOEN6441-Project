@@ -1,4 +1,4 @@
-package models;
+package controllers;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
@@ -19,7 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import controllers.ApiCall;
+import models.Repository;
 import play.mvc.Controller;
 import javax.inject.Inject;
 //import play.cache.*;
