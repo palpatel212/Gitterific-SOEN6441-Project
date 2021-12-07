@@ -7,6 +7,10 @@ import akka.actor.Props;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+/**
+ * This actor class manages repositories
+ * @author Jay Patel
+ */
 public class repoActor extends AbstractActor{
 	
 	private final ActorRef webSocket;

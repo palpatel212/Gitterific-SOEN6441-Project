@@ -1,6 +1,7 @@
 package actors;
 
 import actors.TimeActor.getNewData;
+
 import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
 import akka.actor.Props;
@@ -16,7 +17,10 @@ import java.util.Map;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-
+/**
+ * This actor class manages commits
+ * @author Juhi Patel
+ */
 public class CommitActor extends AbstractActor{
 
 	public static Repository repos = new Repository();
@@ -49,7 +53,6 @@ public class CommitActor extends AbstractActor{
 	@Override
 	public Receive createReceive() {
 		System.out.println("Inside create recieve");
-		// TODO Auto-generated method stub
 		return receiveBuilder()
 				.match(Repository.class,message -> { 	 
 					sender().tell(CommitDetails.findcommit(repos),self());

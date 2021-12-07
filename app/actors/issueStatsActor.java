@@ -13,6 +13,10 @@ import controllers.RepoIssues;
 import models.Issues;
 import models.Repository;
 
+/**
+ * This actor class computes issue statistics
+ * @author Parth Parekh
+ */
 public class issueStatsActor extends AbstractActor{
 	
 	public static Props props() {
@@ -21,7 +25,6 @@ public class issueStatsActor extends AbstractActor{
 	
 	@Override
 	public Receive createReceive() {
-		// TODO Auto-generated method stub
 		return receiveBuilder().match(List.class, issueList -> {
 			System.out.println(issueList);
 			List<String> issueTitles = ((List<Issues>)issueList).stream().map(i -> i.getTitle()).collect(Collectors.toList());

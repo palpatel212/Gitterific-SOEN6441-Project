@@ -8,6 +8,11 @@ import controllers.RepoIssues;
 import models.Issues;
 import models.Repository;
 
+/**
+ * This actor class manages issues of the repository
+ * @author Parth Parekh
+ */
+
 public class issueActor extends AbstractActor{
 	
 	public static Props props() {
@@ -16,7 +21,6 @@ public class issueActor extends AbstractActor{
 	
 	@Override
 	public Receive createReceive() {
-		// TODO Auto-generated method stub
 		return receiveBuilder().match(Repository.class, r -> {
 			try {
 				List<Issues> issueList = RepoIssues.getIssueList(r.getIssuesUrl());
