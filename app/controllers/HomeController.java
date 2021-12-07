@@ -252,7 +252,7 @@ public class HomeController extends Controller {
 		ActorRef issueActorRef = actorSystem.actorOf(issueActor.props());
 		ActorRef repoCollabActoref = actorSystem.actorOf(repoCollabActor.props());
 		CompletableFuture<Object> fut1 = ask(issueActorRef, r, Duration.ofSeconds(5)).toCompletableFuture();
-		CompletableFuture<Object> fut2 = ask(repoCollabActoref, r, Duration.ofSeconds(5)).toCompletableFuture();
+		CompletableFuture<Object> fut2 = ask(repoCollabActoref, r, Duration.ofSeconds(5)).toCompletableFuture();		
 		return fut1.thenApply(issues -> {
 			issueList = (List<Issues>) issues;
 			return ok(views.html.RepoView.render(r, (List<Issues>) issues, RepoCollabs));
