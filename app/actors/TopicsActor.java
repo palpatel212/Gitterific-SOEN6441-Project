@@ -40,6 +40,7 @@ public class TopicsActor extends AbstractActor{
                  .tell(new TimeActor.DeRegisterMsg(), self());
     }
     
+    
     public static Props props(String login) {
     	System.out.println("Inside props");
     	word = login;
