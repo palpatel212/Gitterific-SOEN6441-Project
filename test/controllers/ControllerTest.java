@@ -43,6 +43,7 @@ import akka.actor.ActorSystem;
 import akka.testkit.javadsl.TestKit;
 import actors.issueStatsActor;
 import actors.issueActor;
+import actors.UserActor;
 
 /**This class tests controller
  *
@@ -96,20 +97,20 @@ public class ControllerTest extends WithApplication {
         assertEquals(OK, result.status());
 	}
 	
-	/**
-	 * This method tests the form submit
-	 * @author Parth Parekh
-	 */
-   @Test
-    public void testFormSubmit() {
-	   Map<String, String> data = new HashMap<>();
-	   data.put("keyword", "flink");
-        RequestBuilder request = Helpers.fakeRequest()
-                .method(POST).bodyForm(data).uri("/create");
-
-        Result result = route(app, request);
-        assertEquals(OK, result.status());
-    }
+//	/**
+//	 * This method tests the form submit
+//	 * @author Parth Parekh
+//	 */
+//   @Test
+//    public void testFormSubmit() {
+//	   Map<String, String> data = new HashMap<>();
+//	   data.put("keyword", "flink");
+//        RequestBuilder request = Helpers.fakeRequest()
+//                .method(POST).bodyForm(data).uri("/create");
+//
+//        Result result = route(app, request);
+//        assertEquals(OK, result.status());
+//    }
    
    /**
 	 * This method tests the issues
@@ -238,5 +239,18 @@ public class ControllerTest extends WithApplication {
 	   
        issueActorRef.tell(r, testProbe.getRef());
      }
+    
+    @Test
+    public void testUserAct() {
+    	String login="lyft";
+    	final TestKit testProbe = new TestKit(system);
+    	final ActorRef userActorRef = system
+				.actorOf(UserActor.props(login));
+    	
+       
+       userActorRef.tell(login, ActorRef.noSender());
+       //testProbe.expectMsg(String.class);
+    }
   
 }
+
