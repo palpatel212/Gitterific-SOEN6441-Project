@@ -42,6 +42,7 @@ import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.testkit.javadsl.TestKit;
 import actors.issueStatsActor;
+import actors.repoCollabActor;
 import actors.issueActor;
 import actors.UserActor;
 import actors.CommitActor;
@@ -222,8 +223,24 @@ public class ControllerTest extends WithApplication {
 	   r.setCommitsUrl("https://api.github.com/repos/lyft/flinkk8soperator/commits{/sha}");
 	   r.setIssuesUrl("https://api.github.com/repos/lyft/flinkk8soperator/issues{/number}");
 	   r.setContributorURL("https://api.github.com/repos/lyft/flinkk8soperator/contributors");
-	   
+   
        issueActorRef.tell(r, testProbe.getRef());
+     }
+    
+    /**
+  	 * This method tests the Collaborators of repository implemented by Actors
+  	 * @author Jay Patel
+  	 */
+    
+    @Test
+    public void testRepoCollabs() {
+	   final TestKit testProbe = new TestKit(system);
+	   Repository r = new Repository();
+	   r.setId("189491745");
+	   r.setContributorURL("https://api.github.com/repos/lyft/flinkk8soperator/contributors");
+	   final ActorRef repoCollabActorRef = system
+				.actorOf(repoCollabActor.props());
+	   repoCollabActorRef.tell(r, testProbe.getRef());
      }
     
     @Test
@@ -233,7 +250,7 @@ public class ControllerTest extends WithApplication {
     	final ActorRef userActorRef = system
 				.actorOf(UserActor.props(login));
     	
-       
+     
        userActorRef.tell(login, ActorRef.noSender());
     }
     

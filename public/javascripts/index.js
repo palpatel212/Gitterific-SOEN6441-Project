@@ -21,7 +21,7 @@ function search() {
 		
 	for(let i=0; i<Res.data.length; i++)
 		{
-			var inner = "<div>"
+			var inner = '<div class="result-div">'
 			inner += "<div>"
 			const ResObj = Res.data[i];
 			inner += '<p> User: ' + '<a href="http://localhost:9000/user/' + ResObj.login + '">' + ResObj.login+ '</a> </p>';

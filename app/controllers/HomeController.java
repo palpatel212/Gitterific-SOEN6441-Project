@@ -112,7 +112,7 @@ public class HomeController extends Controller {
 	 * @return Result
 	 */
 	public Result index() {
-		return ok("Hello world");
+		return ok(" Visit: http://localhost:9000/search for searching Repositories");
 	}
 
 	public WebSocket socket() {
@@ -125,7 +125,7 @@ public class HomeController extends Controller {
 	 * @param request http-Request
 	 * @return Result
 	 */
-	public Result create(Http.Request request) {
+	public Result search(Http.Request request) {
 		repoForm = formFactory.form(RepoData.class);
 		System.out.println("In create");
 		return ok(views.html.create.render(repoForm,request,messagesApi.preferred(request), null, null));
@@ -248,15 +248,13 @@ public class HomeController extends Controller {
 			if(id.equals(rd.id))
 				r= rd;
 		}
-
+		this.RepoCollabs = RepoDetails.listCollabRepos(r.getContributorURL());
 		ActorRef issueActorRef = actorSystem.actorOf(issueActor.props());
 		ActorRef repoCollabActoref = actorSystem.actorOf(repoCollabActor.props());
 		CompletableFuture<Object> fut1 = ask(issueActorRef, r, Duration.ofSeconds(5)).toCompletableFuture();
 		CompletableFuture<Object> fut2 = ask(repoCollabActoref, r, Duration.ofSeconds(5)).toCompletableFuture();
-
 		return fut1.thenApply(issues -> {
 			issueList = (List<Issues>) issues;
-			this.RepoCollabs = RepoDetails.listCollabRepos(r.getContributorURL());
 			return ok(views.html.RepoView.render(r, (List<Issues>) issues, RepoCollabs));
 		});
 	}
