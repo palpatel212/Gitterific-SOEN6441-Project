@@ -45,9 +45,9 @@ public class TopicsActor extends AbstractActor{
     }
     
     
-    public static Props props(String login) {
+   public static Props props(String tword) {
     	System.out.println("Inside props");
-    	word = login;
+    	word = tword;
   
         return Props.create(TopicsActor.class, topicsActor);
     }
@@ -62,6 +62,7 @@ public class TopicsActor extends AbstractActor{
    			 })
 			 .build();
 	}
+
 	
 }
 
