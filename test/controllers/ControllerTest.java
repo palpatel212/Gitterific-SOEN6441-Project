@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,6 +42,7 @@ import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.testkit.javadsl.TestKit;
 import actors.issueStatsActor;
+import actors.issueActor;
 
 /**This class tests controller
  *
@@ -208,15 +210,33 @@ public class ControllerTest extends WithApplication {
     @Test
     public void testIssueStatsSearch() {
     	
-    	final TestKit testProbe = new TestKit(system);
-    	final ActorRef issueStatsActorRef = system
+	   final TestKit testProbe = new TestKit(system);
+	   final ActorRef issueStatsActorRef = system
 				.actorOf(issueStatsActor.props());
-    	
- 	   List<Issues> issueList = new ArrayList<Issues>();
- 	   Issues i = new Issues();
- 	   i.setTitle("There is an issue..");
- 	   issueList.add(i);
-       issueStatsActorRef.tell(issueList, ActorRef.noSender());
+		
+	   List<Issues> issueList = new ArrayList<Issues>();
+	   Issues i = new Issues();
+	   i.setTitle("There is an issue..");
+	   issueList.add(i);
+	   issueStatsActorRef.tell(issueList, testProbe.getRef());
     }
+    
+    @Test
+    public void testIssueSearch() {
+	   final TestKit testProbe = new TestKit(system);
+	   final ActorRef issueActorRef = system
+				.actorOf(issueActor.props());
+     	
+	   Repository r = new Repository();
+	   r.setId("189491745");
+	   r.setLogin("lyft");
+	   r.setRepoName("flinkk8soperator");
+	   r.setGitCommitsurl("https://api.github.com/repos/lyft/flinkk8soperator/commits{/sha}");
+	   r.setCommitsUrl("https://api.github.com/repos/lyft/flinkk8soperator/commits{/sha}");
+	   r.setIssuesUrl("https://api.github.com/repos/lyft/flinkk8soperator/issues{/number}");
+	   r.setContributorURL("https://api.github.com/repos/lyft/flinkk8soperator/contributors");
+	   
+       issueActorRef.tell(r, testProbe.getRef());
+     }
   
 }
