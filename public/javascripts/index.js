@@ -21,16 +21,16 @@ function search() {
 		
 	for(let i=0; i<Res.data.length; i++)
 		{
-			var inner = "<div>"
+			var inner = '<div class="result-div">'
 			inner += "<div>"
 			const ResObj = Res.data[i];
-			inner += '<p> User: ' + '<a href="http://localhost:9000/user/' + ResObj.login + '">' + ResObj.login+ '</a> </p>';
-			inner += '<p> Repository: ' + '<a href="http://localhost:9000/check/' + ResObj.id + '">' + ResObj.repoName+ '</a> </p>';
+			inner += '<p> User: ' + '<a href="http://localhost:9000/user/' + ResObj.login + '" target="_blank">' + ResObj.login+ '</a> </p>';
+			inner += '<p> Repository: ' + '<a href="http://localhost:9000/check/' + ResObj.id + '" target="_blank">' + ResObj.repoName+ '</a> </p>';
 			inner += "<p> Topics: </p>";
 			const ResTopics = Res.data[i].topics;
 			for( let j = 0; j< ResTopics.length; j++)
 			{
-			 inner += '<li>' + '<a href="http://localhost:9000/topicsearch/' + ResTopics[j] + '">' + ResTopics[j] + '</a> </li>';
+			 inner += '<li>' + '<a href="http://localhost:9000/topicsearch/' + ResTopics[j] + '" >'  + ResTopics[j] + '</a> </li>';
 			}			
 			inner += " </div> </div>"
 			child_div.innerHTML += inner;
