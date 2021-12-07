@@ -125,9 +125,9 @@ public class CommitDetails {
 		for (Commits c : com) {
 			System.out.println(c.getCommitName());
 		}
-		
+
 		return "ok";
-		
+
 	}
 
 	/**
