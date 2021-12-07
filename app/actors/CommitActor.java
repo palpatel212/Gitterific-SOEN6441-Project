@@ -22,45 +22,39 @@ public class CommitActor extends AbstractActor{
 	public static Repository repos = new Repository();
 	public static ActorRef commitActor;
 	public CommitActor(ActorRef commitActor) {
-	this.commitActor = commitActor;
+		this.commitActor = commitActor;
 	}
-	
-    @Override
-    public void preStart() {
-    	
-       	context().actorSelection("/user/timeActor/")
-                 .tell(new TimeActor.RegisterMsg(), self());
-    }
-    
-    @Override
-    public void postStop() {
-    	
-       	context().actorSelection("/user/timeActor/")
-                 .tell(new TimeActor.DeRegisterMsg(), self());
-    }
-    
-    public static Props props(Repository r) {
-    	System.out.println("Inside props");
-    	repos = r;
-  
-        return Props.create(CommitActor.class, commitActor);
-    }
-    
+
+	@Override
+	public void preStart() {
+
+		context().actorSelection("/user/timeActor/")
+		.tell(new TimeActor.RegisterMsg(), self());
+	}
+
+	@Override
+	public void postStop() {
+
+		context().actorSelection("/user/timeActor/")
+		.tell(new TimeActor.DeRegisterMsg(), self());
+	}
+
+	public static Props props(Repository r) {
+		System.out.println("Inside props");
+		repos = r;
+
+		return Props.create(CommitActor.class, commitActor);
+	}
+
 	@Override
 	public Receive createReceive() {
 		System.out.println("Inside create recieve");
 		// TODO Auto-generated method stub
 		return receiveBuilder()
-   			 .match(Repository.class,message -> { 	 
-   			 sender().tell(CommitDetails.findcommit(repos),self());
-   			 })
-			 .build();
+				.match(Repository.class,message -> { 	 
+					sender().tell(CommitDetails.findcommit(repos),self());
+				})
+				.build();
 	}
-	
-	
-//	public void sendNewData(Repository r) {
-//		System.out.println("Inside send new data");
-//		
-//		commitActor.tell(CommitDetails.findcommit(r),self());
-//		}
+
 }
