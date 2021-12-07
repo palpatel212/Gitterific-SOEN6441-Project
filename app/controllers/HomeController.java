@@ -182,22 +182,7 @@ public class HomeController extends Controller {
 		}).thenApply(issueList -> ok(views.html.issues.render(issueList)));
 	}
 
-	/**
-	 * This method displays userInfo
-	 * @param login Userlogin
-	 * @return Result
-	 */
-	//    public CompletionStage<Result> userinfo(String login)
-	//    {
-	//    	return CompletableFuture.supplyAsync(() -> {
-	//    		UserDetail=UserDetails.storeUserInfo(UserDetails.UserApiCall(login));
-	//    		return UserDetail;
-	//
-	//    	}).thenApply(UserDetail -> ok(views.html.user.render(UserDetail)));
-	//    	
-	////    	UserDetail=UserDetails.storeUserInfo(UserDetails.UserApiCall(login));
-	////    	return ok(views.html.user.render(UserDetail));
-	//    }
+	 
 	public CompletionStage<Result> userinfo(String login) {
 
 		userActor = actorSystem.actorOf(UserActor.props(login));

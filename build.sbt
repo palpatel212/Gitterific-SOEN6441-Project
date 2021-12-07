@@ -25,5 +25,4 @@ libraryDependencies += "org.mockito" % "mockito-core" % "1.10.19" % Test
 
 libraryDependencies +=  "org.scalatest" %% "scalatest" % "3.1.2" % "test"
 libraryDependencies += "com.typesafe.akka" %% "akka-testkit" % "2.6.14" % Test
-// JaCoCo (java) test coverage
-jacoco.settings
+
