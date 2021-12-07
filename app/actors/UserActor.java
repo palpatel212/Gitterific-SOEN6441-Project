@@ -18,6 +18,10 @@ import java.util.Map;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+/**
+ * This actor class manages user profiles
+ * @author Krupali Bhatt
+ */
 public class UserActor extends AbstractActor{
 
 	public static String loginName;
@@ -58,10 +62,4 @@ public class UserActor extends AbstractActor{
 			 .build();
 	}
 	
-	
-//	public void sendNewData(Repository r) {
-//		System.out.println("Inside send new data");
-//		
-//		commitActor.tell(CommitDetails.findcommit(r),self());
-//		}
 }
