@@ -64,7 +64,6 @@ public class RepoIssues {
 
 			listData.parallelStream().forEach(RepoIssues::setRepoIssueObject);
 		});
-
 		return IssueList;
 	}
 }

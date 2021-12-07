@@ -61,6 +61,7 @@ import actors.KeywordSearchActor;
 import actors.SupervisorActor;
 import actors.issueActor;
 import actors.issueStatsActor;
+import actors.repoCollabActor;
 import play.libs.streams.ActorFlow;
 import akka.actor.*;
 import akka.stream.*;
@@ -199,7 +200,6 @@ public class HomeController extends Controller {
 //    }
 public CompletionStage<Result> userinfo(String login) {
 		
-   //Insert a condition to check if actor already exists.If it does destroy it.
     	userActor = actorSystem.actorOf(UserActor.props(login));
     	System.out.println("Inside commit hc user");
     	return FutureConverters.toJava(ask(userActor,login,1000000))
@@ -277,9 +277,11 @@ public CompletionStage<Result> userinfo(String login) {
     	}
     	
     	ActorRef issueActorRef = actorSystem.actorOf(issueActor.props());
-    	CompletableFuture<Object> fut = ask(issueActorRef, r, Duration.ofSeconds(5)).toCompletableFuture();
+    	ActorRef repoCollabActoref = actorSystem.actorOf(repoCollabActor.props());
+    	CompletableFuture<Object> fut1 = ask(issueActorRef, r, Duration.ofSeconds(5)).toCompletableFuture();
+    	CompletableFuture<Object> fut2 = ask(repoCollabActoref, r, Duration.ofSeconds(5)).toCompletableFuture();
     	
-    	return fut.thenApply(issues -> {
+    	return fut1.thenApply(issues -> {
     		issueList = (List<Issues>) issues;
     		this.RepoCollabs = RepoDetails.listCollabRepos(r.getContributorURL());
     		return ok(views.html.RepoView.render(r, (List<Issues>) issues, RepoCollabs));

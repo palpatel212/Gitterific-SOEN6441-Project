@@ -11,6 +11,10 @@ import static play.mvc.Http.Status.OK;
 import static play.test.Helpers.POST;
 import static play.test.Helpers.route;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +22,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import actors.KeywordSearchActor;
 import controllers.HomeController;
 import controllers.RepoDetails;
 
@@ -32,10 +37,18 @@ import play.mvc.Result;
 import play.test.Helpers;
 import play.test.WithApplication;
 
+import akka.actor.ActorRef;
+import akka.actor.ActorSystem;
+import akka.testkit.javadsl.TestKit;
+import actors.issueStatsActor;
+
 /**This class tests controller
  *
  */
 public class ControllerTest extends WithApplication {
+	
+	
+	ActorSystem system = ActorSystem.create();
 	
 	/**
 	 * This method creates a set up for testing
@@ -176,6 +189,34 @@ public class ControllerTest extends WithApplication {
    	 Result result = route(app, request);
         assertEquals(OK, result.status());
    	 
+    }
+    
+    @Test
+    public void testSearch() {
+    	
+    	final TestKit testProbe = new TestKit(system);
+    	final ActorRef keywordSearchActor = system
+				.actorOf(KeywordSearchActor.props(testProbe.getRef()));
+		
+    	final ObjectMapper mapper = new ObjectMapper();
+		final ObjectNode request = mapper.createObjectNode();
+		request.set("keyword", mapper.convertValue("lstm", JsonNode.class));
+		keywordSearchActor.tell(request, ActorRef.noSender());
+		testProbe.expectMsgClass(ObjectNode.class);
+    }
+    
+    @Test
+    public void testIssueStatsSearch() {
+    	
+    	final TestKit testProbe = new TestKit(system);
+    	final ActorRef issueStatsActorRef = system
+				.actorOf(issueStatsActor.props());
+    	
+ 	   List<Issues> issueList = new ArrayList<Issues>();
+ 	   Issues i = new Issues();
+ 	   i.setTitle("There is an issue..");
+ 	   issueList.add(i);
+       issueStatsActorRef.tell(issueList, ActorRef.noSender());
     }
   
 }
