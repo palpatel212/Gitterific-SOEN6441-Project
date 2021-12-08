@@ -254,7 +254,6 @@ public class ControllerTest extends WithApplication {
       
     }
     
-
     /**
   	 * This method tests the Topics
   	 * @author Pal Patel
@@ -269,7 +268,5 @@ public class ControllerTest extends WithApplication {
     	
     	topicsearchActor.tell(tword, ActorRef.noSender());
     }
-       
-    
-  
+         
 }

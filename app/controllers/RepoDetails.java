@@ -49,8 +49,6 @@ public class RepoDetails {
 		obj.setStars(repository.getInt("stargazers_count"));
 		obj.setCreatedAt(repository.getString("created_at").substring(0,10));
 		obj.setContributorURL(repository.getString("contributors_url"));
-		//		obj.setRepoCollabs(repository.getString("contributors_url"));
-		//		obj.setIssueList(repository.getString("issue_url"));
 
 		JSONObject owner = (JSONObject) repository.get("owner");
 		obj.setLogin(owner.getString("login"));
@@ -82,7 +80,6 @@ public class RepoDetails {
 	 * @return repos List of repositories
 	 */
 	public static List<Repository> getRepoDetails(String word) {
-		//		CompletableFuture<List<Repository>> future = new CompletableFuture<>();
 
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("accept", "application/vnd.github.v3+json");
@@ -93,7 +90,6 @@ public class RepoDetails {
 
 		ApiCall.getApiCall(url, map).thenAccept(responseBody -> {
 			JSONObject json = new JSONObject(responseBody);
-			//			CompletionStage<Done> result = cache.set("item.key", json.toString());
 			repos.clear();
 			org.json.JSONArray array = json.getJSONArray("items");
 
@@ -105,14 +101,12 @@ public class RepoDetails {
 			listData.parallelStream().forEach(RepoDetails::setRepoDetails);
 		});
 
-		//		future.complete(repos);
-
 		return repos;
 	}
 
 
 	/**
-	 * This function lists collaboraters for a repository 
+	 * This function lists collaborators for a repository 
 	 * 
 	 * @param contributorURL 
 	 * @return userCollabsList
@@ -122,10 +116,8 @@ public class RepoDetails {
 		System.out.println("In List Repo Collabs Function");
 		JSONArray JsonobjectArray = null;
 		try {
-			//	  		System.out.println("***"+repourl);
 			URIBuilder builder = new URIBuilder(contributorURL);
 			builder.addParameter("accept", "application/vnd.github.v3+json");
-			//			builder.addParameter("per_page", "10");
 			CloseableHttpClient httpclient = HttpClients.createDefault();
 			HttpResponse resp = null;
 			HttpGet getAPI = new HttpGet(builder.build());
@@ -147,11 +139,9 @@ public class RepoDetails {
 			e.printStackTrace();
 		}
 
-		//		System.out.println(JsonobjectArray);
 		ArrayList<String> userCollabsList= new ArrayList<String>();
 
 		for(int i=0; i<JsonobjectArray.length();i++) {
-			//			Repository obj = new Repository();
 			JSONObject collabsOfRepo = (JSONObject)JsonobjectArray.getJSONObject(i);
 			String collabname= (String)collabsOfRepo.getString("login");
 			userCollabsList.add(collabname);

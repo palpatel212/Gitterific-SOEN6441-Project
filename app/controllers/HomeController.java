@@ -131,13 +131,12 @@ public class HomeController extends Controller {
 		System.out.println("In create");
 		return ok(views.html.create.render(repoForm,request,messagesApi.preferred(request), null, null));
 	}
-
+	
 	/**
 	 * This method lists repositories  
 	 * @param request http-Request
 	 * @return Result
 	 */
-
 	public Result onSearch(Http.Request request) {
 		String url = routes.HomeController.socket()
 				.webSocketURL(request);
@@ -145,6 +144,11 @@ public class HomeController extends Controller {
 		return ok(views.html.webSocket.render(url));
 	}
 
+	/**
+	 * This method processes the keyword search request  
+	 * @param request http-Request
+	 * @return Result
+	 */
 	public CompletionStage<Result> save(Http.Request request) {
 
 		Form<RepoData> repoForm = formFactory.form(RepoData.class);
@@ -210,12 +214,18 @@ public class HomeController extends Controller {
 		});
 	}
 
+	/**
+	 * This method filters the results by a topic name
+	 * @param t String
+	 * @return Result
+	 */
     public CompletionStage<Result> topicsearch(String t) {
 		ActorRef topicsActor = actorSystem.actorOf(TopicsActor.props(t));
 		System.out.println("Inside topicsearch in HomeCntroller");
 		return FutureConverters.toJava(ask(topicsActor,t,1000000))
     			.thenApply(reponse -> ok(views.html.index.render(RepoTopics.repotopics)));
 	}
+    
 	/**
 	 * This method renders commits view
 	 * @param id RepositoryId

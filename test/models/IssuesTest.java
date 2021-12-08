@@ -2,6 +2,8 @@ package models;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
+import models.Issues;
+
 /**This class contains methods for testing Issues class
  * @author Pal Patel
  *
