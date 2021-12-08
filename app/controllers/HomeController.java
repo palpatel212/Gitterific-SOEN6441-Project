@@ -55,6 +55,7 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import static akka.pattern.Patterns.ask;
 import actors.TimeActor;
+import actors.TopicsActor;
 import actors.UserActor;
 import actors.CommitActor;
 import actors.KeywordSearchActor;
@@ -209,12 +210,11 @@ public class HomeController extends Controller {
 		});
 	}
 
-
-
-
-	public Result topicsearch(String t) {
-		List<Repository> r = RepoTopics.getRepoDetails(t);
-		return ok(views.html.index.render(r));
+    public CompletionStage<Result> topicsearch(String t) {
+		ActorRef topicsActor = actorSystem.actorOf(TopicsActor.props(t));
+		System.out.println("Inside topicsearch in HomeCntroller");
+		return FutureConverters.toJava(ask(topicsActor,t,1000000))
+    			.thenApply(reponse -> ok(views.html.index.render(RepoTopics.repotopics)));
 	}
 	/**
 	 * This method renders commits view
