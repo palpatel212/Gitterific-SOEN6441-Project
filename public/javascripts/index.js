@@ -10,33 +10,45 @@ function search() {
 	};
 	let msg = JSON.stringify(message);	
 	searchSocket.send(msg);
+	
+	
 	searchSocket.onmessage = function(event) {
+	
+		var div = document.getElementById('result_contents');
+		var child_div = document.createElement('div');
+		
 		var response = event.data;
 		const Res = JSON.parse(response);
+		const data = Res.data;
+		let keys = Object.keys(data).reverse();
+		console.log(keys);
 		
-		var div = document.getElementById('result_contents');
-
-		var child_div = document.createElement('div');
-		console.log(Res.data.length);
-		
-	for(let i=0; i<Res.data.length; i++)
+		for(let i=0; i < keys.length; i++)
 		{
-			var inner = '<div class="result-div">'
-			inner += "<div>"
-			const ResObj = Res.data[i];
-			inner += '<p> User: ' + '<a href="http://localhost:9000/user/' + ResObj.login + '" target="_blank">' + ResObj.login+ '</a> </p>';
-			inner += '<p> Repository: ' + '<a href="http://localhost:9000/check/' + ResObj.id + '" target="_blank">' + ResObj.repoName+ '</a> </p>';
-			inner += "<p> Topics: </p>";
-			const ResTopics = Res.data[i].topics;
-			for( let j = 0; j< ResTopics.length; j++)
+		console.log(data[keys[i]].length);
+			for(let j=0; j<data[keys[i]].length; j++)
 			{
-			 inner += '<li>' + '<a href="http://localhost:9000/topicsearch/' + ResTopics[j] + '" >'  + ResTopics[j] + '</a> </li>';
-			}			
-			inner += " </div> </div>"
-			child_div.innerHTML += inner;
+				var ResObj = data[keys[i]][j];
+				var inner = '<div class="result-div">'
+				inner += "<div>"
+				inner += '<p> User: ' + '<a href="http://localhost:9000/user/' + ResObj.login + '" target="_blank">' + ResObj.login+ '</a> </p>';
+				inner += '<p> Repository: ' + '<a href="http://localhost:9000/check/' + ResObj.id + '" target="_blank">' + ResObj.repoName+ '</a> </p>';
+				inner += "<p> Topics: </p>";
+				
+				const ResTopics = ResObj.topics;
+				for( let j = 0; j< ResTopics.length; j++)
+				{
+				 inner += '<li>' + '<a href="http://localhost:9000/topicsearch/' + ResTopics[j] + '" >'  + ResTopics[j] + '</a> </li>';
+				}	
+				
+				inner += " </div> </div>"
+				child_div.innerHTML += inner;
+				console.log(data[keys[i]][j].id);
+				console.log(data[keys[i]][j].login);
+			}
 		}
-
-		div.prepend(child_div)
-
+		
+		div.innerHTML= "";
+		div.prepend(child_div);	
 	}
 }

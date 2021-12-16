@@ -94,7 +94,7 @@ public class ControllerTest extends WithApplication {
     public void testCreateController() {
         RequestBuilder request = Helpers.fakeRequest()
                 .method(GET)
-                .uri("/create");
+                .uri("/search");
 
         Result result = route(app, request);
         assertEquals(OK, result.status());
@@ -195,6 +195,7 @@ public class ControllerTest extends WithApplication {
 	   i.setTitle("There is an issue..");
 	   issueList.add(i);
 	   issueStatsActorRef.tell(issueList, testProbe.getRef());
+	   testProbe.expectMsgClass(Map.class);
     }
     
     @Test
@@ -213,6 +214,7 @@ public class ControllerTest extends WithApplication {
 	   r.setContributorURL("https://api.github.com/repos/lyft/flinkk8soperator/contributors");
    
        issueActorRef.tell(r, testProbe.getRef());
+       testProbe.expectMsgClass(List.class);
      }
     
     /**

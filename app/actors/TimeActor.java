@@ -76,7 +76,7 @@ public class TimeActor extends AbstractActorWithTimers {
     @SuppressWarnings("deprecation")
 	@Override
     public void preStart() {
-        getTimers().startPeriodicTimer("Timer", new Tick(), Duration.create(30, TimeUnit.SECONDS));
+        getTimers().startPeriodicTimer("Timer", new Tick(), Duration.create(10, TimeUnit.SECONDS));
     }
     
     /**

@@ -3,6 +3,7 @@ package controllers;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -36,6 +37,8 @@ public class ApiCall {
 		CompletableFuture<String> future = new CompletableFuture<>();
 		//		JSONObject jsonObject = null;
 		String responseBody = null;
+		String authStr = "parth2347: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";
+		String authEncoded = Base64.getEncoder().encodeToString(authStr.getBytes());
 
 		try {
 			URIBuilder builder = new URIBuilder(url);
@@ -47,6 +50,7 @@ public class ApiCall {
 			HttpResponse resp = null;
 
 			HttpGet getAPI = new HttpGet(builder.build());
+			getAPI.setHeader("Authorization", "Basic " + authEncoded);
 			resp = httpclient.execute(getAPI);
 
 			StatusLine statusLine = resp.getStatusLine();

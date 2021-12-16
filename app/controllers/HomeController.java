@@ -243,6 +243,7 @@ public class HomeController extends Controller {
 
 	public CompletionStage<Result> repo(String id)
 	{
+		System.out.println(RepoDetails.repos);
 		issueList.clear();
 		for(Repository rd : RepoDetails.repos) {
 			if(id.equals(rd.id))
