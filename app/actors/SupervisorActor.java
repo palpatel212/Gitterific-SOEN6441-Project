@@ -8,7 +8,7 @@ import akka.actor.OneForOneStrategy;
 import java.time.Duration;
 
 /**
- * This actor class is a supervisorActor. It implementsfault tolerance strategy.
+ * This actor class is a supervisorActor. It implements fault tolerance strategy.
  * @author KP_G03
  */
 public class SupervisorActor extends AbstractActor {

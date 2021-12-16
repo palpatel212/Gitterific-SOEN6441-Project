@@ -2,6 +2,8 @@ package models;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
+import models.Committer;
+
 /**This class contains methods for testing CommitterTest class
  * @author Pal Patel
  *

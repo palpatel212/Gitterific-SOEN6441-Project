@@ -35,6 +35,12 @@ import javax.inject.Inject;
 public class RepoTopics{
 
 	static public List<Repository> repotopics = new ArrayList<Repository>();
+	
+	/**
+	 * Method for storing parameters of the JSONObject
+	 * 
+	 * @author Pal Patel
+	 */
 	public static void setRepoTopics(JSONObject repository) {
 		Repository obj = new Repository();
 		try {
@@ -46,8 +52,6 @@ public class RepoTopics{
 			obj.setStars(repository.getInt("stargazers_count"));
 			obj.setCreatedAt(repository.getString("created_at").substring(0,10));
 			obj.setContributorURL(repository.getString("contributors_url"));
-			//		obj.setRepoCollabs(repository.getString("contributors_url"));
-			//		obj.setIssueList(repository.getString("issue_url"));
 
 			JSONObject owner = (JSONObject) repository.get("owner");
 			obj.setLogin(owner.getString("login"));
@@ -78,8 +82,12 @@ public class RepoTopics{
 		}
 	}
 
+	/**
+	 * Method for the API Call
+	 * 
+	 * @author Pal Patel
+	 */
 	public static List<Repository> getRepoDetails(String word) {
-		//		CompletableFuture<List<Repository>> future = new CompletableFuture<>();
 
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("accept", "application/vnd.github.v3+json");
@@ -90,7 +98,6 @@ public class RepoTopics{
 		ApiCall.getApiCall(url, map).thenAccept(responseBody -> {
 			JSONObject json = new JSONObject(responseBody);
 			System.out.println(json.toString(4));
-			//			CompletionStage<Done> result = cache.set("item.key", json.toString());
 			org.json.JSONArray array = json.getJSONArray("items");
 
 			ArrayList<JSONObject> listData = new ArrayList<JSONObject>();
@@ -101,13 +108,11 @@ public class RepoTopics{
 			listData.parallelStream().forEach(RepoTopics::setRepoTopics);
 		});
 
-		//		future.complete(repotopics);
 
 		return repotopics;
 	}
 
-
-	//Calling repo_url
+	
 	public static ArrayList<String> listCollabRepos(String contributorURL)
 	{
 		System.out.println("In List Repo Collabs Function");

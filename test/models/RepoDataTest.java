@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import models.RepoData;
+
 /**This class contains methods for testing RepoData class
  * @author Pal Patel
  *

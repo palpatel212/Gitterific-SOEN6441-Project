@@ -4,19 +4,14 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import models.User;
+
 /**This class contains methods for testing User class
  * @author Pal Patel
  *
  */
 public class UserTest {
 
-	
-	@Test
-	public void tUserRepos(){
-		
-	}
-	
-	
 	@Test
 	public void tFollowers(){
 		User testFollowers= new User();

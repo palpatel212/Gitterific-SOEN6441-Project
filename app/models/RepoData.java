@@ -30,17 +30,9 @@ public class RepoData {
 	}
 	/**
 	 * 
-	 * @param keyword   keyword to be set
+	 * @param keyword to be set
 	 */
 	public void setKeyword(String keyword) {
 		this.keyword = keyword;
 	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	//@Override
-	//public String toString() {
-	//return "TweetData [keyword=" + keyword + "]";
-	//}
 }

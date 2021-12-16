@@ -3,19 +3,14 @@ package models;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
+import models.Repository;
+
 /**This class contains method for testing Repository class
  * @author Pal Patel
  *
  */
 public class RepositoryTest{
 	
-
-//	@Test
-//	public void tIssueList(){
-//		Repository testIssueList= new Repository();
-//		testIssueList.setIssueList("IssueList");
-//		assertEquals(testIssueList.getIssueList(),"IssueList");
-//	}
 	
 	@Test
 	public void tContributorURL(){
@@ -23,13 +18,6 @@ public class RepositoryTest{
 		testContributorURL.setContributorURL("ContributorURL");
 		assertEquals(testContributorURL.getContributorURL(),"ContributorURL");
 	}
-	
-//	@Test
-//	public void tRepoCollabs(){
-//		Repository testRepoCollabs= new Repository();
-//		testRepoCollabs.setRepoCollabs("RepoCollabs");
-//		assertEquals(testRepoCollabs.getRepoCollabs(),"RepoCollabs");
-//	}
 	
 	@Test
 	public void tLanguage(){
@@ -130,11 +118,5 @@ public class RepositoryTest{
 		assertEquals(testIssuesUrl.getIssuesUrl(),"www.issuesurl.com");
 	}
 	
-//	@Test
-//	public void tTopics(){
-//		Repository testTopics= new Repository();
-//		testTopics.setTopics("Algorithms", "Java");
-//		assertEquals(testTopics.getTopics(),"Algorithms", "Java");
-//	}
 	
 }

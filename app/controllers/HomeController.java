@@ -40,7 +40,6 @@ import models.RepoData;
 import controllers.RepoTopics;
 import models.Repository;
 import models.User;
-//import models.UserRepos;
 import play.data.Form;
 import play.data.FormFactory;
 import play.i18n.MessagesApi;
@@ -55,6 +54,7 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import static akka.pattern.Patterns.ask;
 import actors.TimeActor;
+import actors.TopicsActor;
 import actors.UserActor;
 import actors.CommitActor;
 import actors.KeywordSearchActor;
@@ -67,7 +67,6 @@ import akka.actor.*;
 import akka.stream.*;
 import static akka.pattern.Patterns.ask;
 import java.time.Duration;
-
 import scala.compat.java8.FutureConverters;
 
 /**
@@ -130,13 +129,12 @@ public class HomeController extends Controller {
 		System.out.println("In create");
 		return ok(views.html.create.render(repoForm,request,messagesApi.preferred(request), null, null));
 	}
-
+	
 	/**
 	 * This method lists repositories  
 	 * @param request http-Request
 	 * @return Result
 	 */
-
 	public Result onSearch(Http.Request request) {
 		String url = routes.HomeController.socket()
 				.webSocketURL(request);
@@ -144,6 +142,11 @@ public class HomeController extends Controller {
 		return ok(views.html.webSocket.render(url));
 	}
 
+	/**
+	 * This method processes the keyword search request  
+	 * @param request http-Request
+	 * @return Result
+	 */
 	public CompletionStage<Result> save(Http.Request request) {
 
 		Form<RepoData> repoForm = formFactory.form(RepoData.class);
@@ -209,13 +212,18 @@ public class HomeController extends Controller {
 		});
 	}
 
-
-
-
-	public Result topicsearch(String t) {
-		List<Repository> r = RepoTopics.getRepoDetails(t);
-		return ok(views.html.index.render(r));
+	/**
+	 * This method filters the results by a topic name
+	 * @param t String
+	 * @return Result
+	 */
+    public CompletionStage<Result> topicsearch(String t) {
+		ActorRef topicsActor = actorSystem.actorOf(TopicsActor.props(t));
+		System.out.println("Inside topicsearch in HomeCntroller");
+		return FutureConverters.toJava(ask(topicsActor,t,1000000))
+    			.thenApply(reponse -> ok(views.html.index.render(RepoTopics.repotopics)));
 	}
+    
 	/**
 	 * This method renders commits view
 	 * @param id RepositoryId
@@ -253,7 +261,7 @@ public class HomeController extends Controller {
 		ActorRef issueActorRef = actorSystem.actorOf(issueActor.props());
 		ActorRef repoCollabActoref = actorSystem.actorOf(repoCollabActor.props());
 		CompletableFuture<Object> fut1 = ask(issueActorRef, r, Duration.ofSeconds(5)).toCompletableFuture();
-		CompletableFuture<Object> fut2 = ask(repoCollabActoref, r, Duration.ofSeconds(5)).toCompletableFuture();
+		CompletableFuture<Object> fut2 = ask(repoCollabActoref, r, Duration.ofSeconds(5)).toCompletableFuture();		
 		return fut1.thenApply(issues -> {
 			issueList = (List<Issues>) issues;
 			return ok(views.html.RepoView.render(r, (List<Issues>) issues, RepoCollabs));

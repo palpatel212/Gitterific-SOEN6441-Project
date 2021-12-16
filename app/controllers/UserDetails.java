@@ -33,9 +33,8 @@ public class UserDetails {
 
 	static public User userInfo=new User();
 
-
 	/**
-	 * Calling User api for getting JSON object of user information
+	 * Calling User API for getting JSON object of user information
 	 * @param login
 	 * @return jsonObject
 	 */
@@ -139,12 +138,9 @@ public class UserDetails {
 			obj.setForks(repository.getInt("forks"));
 			obj.setIssuesUrl(repository.getString("issues_url"));
 			obj.setWatchers_count(repository.getInt("watchers_count"));
-//			obj.setScore(repository.getInt("score"));
 			obj.setStars(repository.getInt("stargazers_count"));
 			obj.setCreatedAt(repository.getString("created_at").substring(0,10));
 			obj.setContributorURL(repository.getString("contributors_url"));
-			//		obj.setRepoCollabs(repository.getString("contributors_url"));
-			//		obj.setIssueList(repository.getString("issue_url"));
 
 			JSONObject owner = (JSONObject) repository.get("owner");
 			obj.setLogin(owner.getString("login"));
@@ -173,7 +169,5 @@ public class UserDetails {
 		return userReposlist;
 
 	}
-
-
 	
 }

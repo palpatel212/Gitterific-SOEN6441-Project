@@ -1,7 +1,5 @@
 package controllers;
-
 import play.test.Helpers;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static play.mvc.Http.Status.SEE_OTHER;
@@ -10,7 +8,6 @@ import static play.mvc.Http.Status.BAD_REQUEST;
 import static play.mvc.Http.Status.OK;
 import static play.test.Helpers.POST;
 import static play.test.Helpers.route;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -88,10 +85,10 @@ public class ControllerTest extends WithApplication {
 	
 	/**
 	 * This method tests the create controller
-	 * @author Parth Parekh
+	 * @author Jay Patel
 	 */	
 	@Test
-    public void testCreateController() {
+    public void testSearchController() {
         RequestBuilder request = Helpers.fakeRequest()
                 .method(GET)
                 .uri("/search");
@@ -221,7 +218,6 @@ public class ControllerTest extends WithApplication {
   	 * This method tests the Collaborators of repository implemented by Actors
   	 * @author Jay Patel
   	 */
-    
     @Test
     public void testRepoCollabs() {
 	   final TestKit testProbe = new TestKit(system);
@@ -260,7 +256,6 @@ public class ControllerTest extends WithApplication {
       
     }
     
-
     /**
   	 * This method tests the Topics
   	 * @author Pal Patel
@@ -275,7 +270,5 @@ public class ControllerTest extends WithApplication {
     	
     	topicsearchActor.tell(tword, ActorRef.noSender());
     }
-       
-    
-  
+         
 }

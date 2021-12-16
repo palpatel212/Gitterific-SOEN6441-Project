@@ -18,10 +18,12 @@ import java.util.Map;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+
 /**
  * This actor class manages topics.
  * @author Pal Patel
  */
+
 public class TopicsActor extends AbstractActor{
 
 	public static String word;
@@ -45,7 +47,7 @@ public class TopicsActor extends AbstractActor{
     }
     
     
-   public static Props props(String tword) {
+    public static Props props(String tword) {
     	System.out.println("Inside props");
     	word = tword;
   
@@ -62,7 +64,6 @@ public class TopicsActor extends AbstractActor{
    			 })
 			 .build();
 	}
-
 	
 }
 
